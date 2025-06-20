@@ -20,10 +20,8 @@ RUN bun run build
 FROM oven/bun:1.2-slim AS production
 
 # Set working directory
-WORKDIR /app
-
-# Copy built application and package files
-COPY --from=base /app/build ./build
+WORKDIR /app    # Copy built application and package files
+COPY --from=base /app/.svelte-kit ./.svelte-kit
 COPY --from=base /app/package.json ./
 COPY --from=base /app/node_modules ./node_modules
 
