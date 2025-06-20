@@ -1,0 +1,14 @@
+node_modules
+.git
+.gitignore
+.svelte-kit
+.env
+.env.local
+.env.production
+.vscode
+dist
+*.md
+.eslintrc*
+.prettierrc*
+Dockerfile
+.dockerignore
