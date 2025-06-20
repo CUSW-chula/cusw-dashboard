@@ -17,7 +17,7 @@ COPY . .
 RUN bun run build
 
 # Production stage
-FROM oven/bun:latest-slim AS production
+FROM oven/bun:1.2-slim AS production
 
 # Set working directory
 WORKDIR /app
