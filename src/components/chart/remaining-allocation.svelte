@@ -17,13 +17,13 @@
 <Card.Root class="flex flex-col">
 	<Card.Header class="items-center justify-center gap-4 text-center">
 		<Card.Title>การจัดสรรงบคงเหลือ</Card.Title>
-		<Card.Description
+		<Card.Description class="text-black"
 			>งบประมาณ {dashboard.sumBudget} บาท ค่าใช้จ่าย
 			<span class="text-red-500"> {dashboard.sumExpense}</span> บาท</Card.Description
 		>
 	</Card.Header>
 	<Card.Content class="w-[370px] flex-1 justify-center">
-		<Chart.Container config={chartConfig} class="aspect-square ">
+		<Chart.Container config={chartConfig} class="mx-auto aspect-square max-h-[250px]">
 			<PieChart
 				data={[
 					{ type: 'expense', money: dashboard.sumExpense, color: chartConfig.budget.color },
@@ -43,7 +43,7 @@
 						value="เงินคงเหลือ"
 						textAnchor="middle"
 						verticalAnchor="middle"
-						class="fill-muted-foreground! text-black"
+						class="fill-foreground text-black!"
 						dy={-32}
 					/>
 					<Text
@@ -60,14 +60,14 @@
 			</PieChart>
 		</Chart.Container>
 	</Card.Content>
-	<Card.Footer class="mt-[-48px] flex justify-center gap-2 text-sm">
+	<Card.Footer class="flex justify-center gap-2 text-sm">
 		<legend class="flex items-center gap-1"
-			><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.budget
-				.label}</legend
+			><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.budget.label}
+			{((dashboard.sumBudget / (dashboard.sumBudget + dashboard.sumExpense)) * 100).toFixed(2)} %</legend
 		>
 		<legend class="flex items-center gap-1"
-			><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.expense
-				.label}</legend
+			><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.expense.label}
+			{((dashboard.sumExpense / (dashboard.sumBudget + dashboard.sumExpense)) * 100).toFixed(2)} %</legend
 		>
 	</Card.Footer>
 </Card.Root>
