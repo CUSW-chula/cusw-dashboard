@@ -8,7 +8,7 @@ export default defineConfig({
 	server: {
 		port: 5431,
 		host: '0.0.0.0',
-		allowedHosts: true,
+		allowedHosts: ['cusw-workspace.sa.chula.ac.th'],
 		hmr: {
 			host: 'cusw-workspace.sa.chula.ac.th'
 		}
