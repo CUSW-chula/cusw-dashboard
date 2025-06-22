@@ -34,4 +34,4 @@ ENV PORT=5431
 ENV HOST=0.0.0.0
 
 # Start the application
-CMD ["bun", "run", "start"]
+CMD ["bun", "run", "preview"]
