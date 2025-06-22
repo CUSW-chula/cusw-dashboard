@@ -14,6 +14,9 @@ export default defineConfig({
 		}
 	},
 	preview: {
+		headers: {
+			'Access-Control-Allow-Origin': 'https://cusw-workspace.sa.chula.ac.th'
+		},
 		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
 	}
 });
