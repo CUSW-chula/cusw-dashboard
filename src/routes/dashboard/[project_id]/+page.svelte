@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import GanttChart from '../../../components/gantt-chart.svelte';
-	import { BASE_URL } from '../../../lib/shared.js';
+	import { API_BASE_URL } from '../../../lib/shared.js';
 	import { page } from '$app/stores';
 	import { get } from 'svelte/store';
 	import DateFilter from '../../../components/filter/date-filter.svelte';
@@ -16,10 +16,9 @@
 	let ganttchart = [];
 	const { params } = get(page);
 	const projectId = params.project_id;
-
 	onMount(async () => {
 		try {
-			const response = await fetch(`http://localhost:4000/api/v2/ganttchart/${projectId}`, {
+			const response = await fetch(`${API_BASE_URL}/v2/ganttchart/${projectId}`, {
 				headers: {
 					Authorization: auth
 				}

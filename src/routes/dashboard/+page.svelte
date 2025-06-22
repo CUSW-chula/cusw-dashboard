@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import GanttChart from '../../components/gantt-chart.svelte';
-	import { BASE_URL } from '../../lib/shared.js';
+	import { API_BASE_URL } from '../../lib/shared.js';
 	import BudgetAllocation from '../../components/chart/budget-allocation.svelte';
 	import ExpensesAllocation from '../../components/chart/expenses-allocation.svelte';
 	import RemainingAllocation from '../../components/chart/remaining-allocation.svelte';
@@ -46,10 +46,9 @@
 	// ตัวอย่างการใช้งาน
 	let ganttchart = [];
 	let dashboard = [];
-	onMount(async () => {
-		/* fetch data for ganttchart */
+	onMount(async () => {		/* fetch data for ganttchart */
 		try {
-			const response = await fetch(`http://localhost:4000/api/v2/ganttchart/project`, {
+			const response = await fetch(`${API_BASE_URL}/v2/ganttchart/project`, {
 				headers: {
 					Authorization: auth
 				}
@@ -63,7 +62,7 @@
 
 		/* fetch data for dashboard */
 		try {
-			const response = await fetch(`http://localhost:4000/api/v2/dashboard/project`, {
+			const response = await fetch(`${API_BASE_URL}/v2/dashboard/project`, {
 				headers: {
 					Authorization: auth
 				}

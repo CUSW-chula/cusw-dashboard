@@ -7,5 +7,8 @@ export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
 	server: {
 		port: 3000
+	},
+	preview: {
+		allowedHosts: ['localhost', 'cusw-workspace.sa.chula.ac.th']
 	}
 });
