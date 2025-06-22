@@ -46,7 +46,8 @@
 	// ตัวอย่างการใช้งาน
 	let ganttchart = [];
 	let dashboard = [];
-	onMount(async () => {		/* fetch data for ganttchart */
+	onMount(async () => {
+		/* fetch data for ganttchart */
 		try {
 			const response = await fetch(`${API_BASE_URL}/v2/ganttchart/project`, {
 				headers: {
