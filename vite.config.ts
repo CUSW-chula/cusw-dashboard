@@ -9,6 +9,6 @@ export default defineConfig({
 		port: 3000
 	},
 	preview: {
-		allowedHosts: ['localhost', 'cusw-workspace.sa.chula.ac.th']
+		allowedHosts: true
 	}
 });
