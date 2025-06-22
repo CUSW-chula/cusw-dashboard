@@ -4,13 +4,16 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
+	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],	
 	server: {
 		port: 5431,
 		host: true,
-		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
+		allowedHosts: true,
+		hmr: {
+			host: 'cusw-workspace.sa.chula.ac.th'
+		}
 	},
 	preview: {
-		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
+		allowedHosts: true
 	}
 });
