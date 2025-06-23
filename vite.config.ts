@@ -6,7 +6,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
 	server: {
-		port: 5431,
+		port: 3000,
 		host: '0.0.0.0',
 		hmr: {
 			host: 'cusw-workspace.sa.chula.ac.th'
