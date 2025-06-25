@@ -9,8 +9,9 @@
 	} from '@internationalized/date';
 	import { cn } from '$lib/utils.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import { RangeCalendarEdited } from '$lib/components/ui/range-calendar-wai/index.js';
+	import { RangeCalendar } from '$lib/components/ui/range-calendar/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
+	import { parseDate } from '@internationalized/date';
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'medium'
@@ -23,11 +24,25 @@
 
 	let startValue: DateValue | undefined = $state(undefined);
 	let endValue: DateValue | undefined = $state(undefined);
-	//let yearRange: number[] that start from 2024 to thisyear + 3 but is this year + 3 
-	let yearRange: number[] = $state(
-		Array.from({ length: 6 }, (_, i) => new Date().getFullYear() + i - 2)
-	);
 
+	let currentYear = $state(new Date().getFullYear());
+	let currentMonth = $state(new Date().getMonth() + 1);
+
+	const years = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
+	const months = [
+		{ value: 1, label: 'January' },
+		{ value: 2, label: 'February' },
+		{ value: 3, label: 'March' },
+		{ value: 4, label: 'April' },
+		{ value: 5, label: 'May' },
+		{ value: 6, label: 'June' },
+		{ value: 7, label: 'July' },
+		{ value: 8, label: 'August' },
+		{ value: 9, label: 'September' },
+		{ value: 10, label: 'October' },
+		{ value: 11, label: 'November' },
+		{ value: 12, label: 'December' }
+	];
 
 	const handleValueChange = (dateRange: DateRange) => {
 		startValue = dateRange.start;
@@ -37,6 +52,22 @@
 			end: endValue ? endValue.toDate(getLocalTimeZone()) : null
 		});
 	};
+	function jumpAndUnselect() {
+		// 1️⃣ set วันที่ 1 เพื่อให้ calendar ข้ามไปเดือนนั้น
+		const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`;
+		value = {
+			start: parseDate(dateStr),
+			end: undefined
+		};
+
+		// 2️⃣ unselct ทันทีหลัง render (next tick)
+		setTimeout(() => {
+			value = {
+				start: undefined,
+				end: undefined
+			};
+		}, 0);
+	}
 </script>
 
 <div class="grid gap-2">
@@ -60,11 +91,21 @@
 			{/if}
 		</Popover.Trigger>
 		<Popover.Content class="w-auto p-0" align="start">
-			<RangeCalendarEdited
-				bind:value
-				onValueChange={(dateRange) => handleValueChange(dateRange)}
-				numberOfMonths={2}
-			/>
+			<div class="mb-2 flex gap-2">
+				<select bind:value={currentMonth} on:change={jumpAndUnselect}>
+					{#each months as month}
+						<option value={month.value}>{month.label}</option>
+					{/each}
+				</select>
+
+				<select bind:value={currentYear} on:change={jumpAndUnselect}>
+					{#each years as year}
+						<option value={year}>{year}</option>
+					{/each}
+				</select>
+			</div>
+
+			<RangeCalendar bind:value numberOfMonths={2} onValueChange={handleValueChange} />
 		</Popover.Content>
 	</Popover.Root>
 </div>
