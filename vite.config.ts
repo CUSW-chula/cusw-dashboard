@@ -11,7 +11,7 @@ export default defineConfig({
 		hmr: {
 			host: 'cusw-workspace.sa.chula.ac.th'
 		},
-		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
+		allowedHosts: true
 	},
 	preview: {
 		headers: {
@@ -19,6 +19,6 @@ export default defineConfig({
 		},
 		port: 4173,
 		host: '0.0.0.0',
-		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
+		allowedHosts: true
 	}
 });
