@@ -10,7 +10,8 @@ export default defineConfig({
 		host: '0.0.0.0',
 		hmr: {
 			host: 'cusw-workspace.sa.chula.ac.th'
-		}
+		},
+		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
 	},
 	preview: {
 		headers: {
