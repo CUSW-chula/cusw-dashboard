@@ -18,6 +18,7 @@ export default defineConfig({
 			'Access-Control-Allow-Origin': '*'
 		},
 		port: 4173,
+		host: 'https://cusw-workspace.sa.chula.ac.th',
 		allowedHosts: true
 	}
 });
