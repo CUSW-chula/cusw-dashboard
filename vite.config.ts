@@ -16,6 +16,8 @@ export default defineConfig({
 		headers: {
 			'Access-Control-Allow-Origin': '*'
 		},
+		port: 4173,
+		host: '0.0.0.0',
 		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
 	}
 });
