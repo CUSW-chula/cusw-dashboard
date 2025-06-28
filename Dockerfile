@@ -20,12 +20,10 @@ RUN bun run build
 FROM oven/bun:1.2-slim AS production
 
 # Set working directory
-# Copy built application and package files <-- ย้ายคอมเมนต์มาไว้บรรทัดนี้
 WORKDIR /app
 
-COPY --from=base /app/.svelte-kit ./.svelte-kit
-COPY --from=base /app/package.json ./
-COPY --from=base /app/node_modules ./node_modules
+# Copy built application and all files
+COPY --from=base /app ./
 
 # Expose port 5432
 EXPOSE 4173
