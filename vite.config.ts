@@ -18,7 +18,6 @@ export default defineConfig({
 			'Access-Control-Allow-Origin': '*'
 		},
 		port: 4173,
-		host: '0.0.0.0',
 		allowedHosts: true
 	}
 });
