@@ -5,7 +5,6 @@
 	import { Circle } from 'lucide-svelte';
 
 	let { dashboard } = $props();
-	console.log($inspect(dashboard));
 
 	const colorList = ['#69BCA0', '#489CFF', '#F4BE38', '#F79939', '#D36FFF', '#FF6B6B'];
 
