@@ -6,16 +6,19 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit(), devtoolsJson()],
 	server: {
-		port: 5431,
+		port: 4173,
 		host: '0.0.0.0',
 		hmr: {
 			host: 'cusw-workspace.sa.chula.ac.th'
-		}
+		},
+		allowedHosts: true
 	},
 	preview: {
 		headers: {
 			'Access-Control-Allow-Origin': '*'
 		},
-		allowedHosts: ['cusw-workspace.sa.chula.ac.th']
+		port: 4173,
+		host: 'https://cusw-workspace.sa.chula.ac.th',
+		allowedHosts: true
 	}
 });

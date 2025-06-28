@@ -20,18 +20,16 @@ RUN bun run build
 FROM oven/bun:1.2-slim AS production
 
 # Set working directory
-WORKDIR /app    # Copy built application and package files
-COPY --from=base /app/.svelte-kit ./.svelte-kit
-COPY --from=base /app/package.json ./
-COPY --from=base /app/node_modules ./node_modules
+WORKDIR /app
+
+# Copy built application and all files
+COPY --from=base /app ./
 
 # Expose port 5432
-EXPOSE 5431
+EXPOSE 4173
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=5431
-ENV HOST=0.0.0.0
 
 # Start the application
 CMD ["bun", "run", "preview"]
