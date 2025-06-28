@@ -5,7 +5,7 @@
 	import { PieChart, Text } from 'layerchart';
 	import { Circle } from 'lucide-svelte';
 
-	export let dashboard;
+	let { dashboard } = $props();
 
 	const chartData = [{ expense: dashboard.sumExpense, budget: dashboard.sumBudget }];
 	const chartConfig = {
@@ -18,8 +18,16 @@
 	<Card.Header class="items-center justify-center gap-4 text-center">
 		<Card.Title>การจัดสรรงบคงเหลือ</Card.Title>
 		<Card.Description class="text-black"
-			>งบประมาณ {dashboard.sumBudget} บาท ค่าใช้จ่าย
-			<span class="text-red-500"> {dashboard.sumExpense}</span> บาท</Card.Description
+			>งบประมาณ {dashboard.sumBudget?.toLocaleString('th-TH', {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			}) ?? '0'} บาท ค่าใช้จ่าย
+			<span class="text-red-500">
+				{dashboard.sumExpense?.toLocaleString('th-TH', {
+					minimumFractionDigits: 2,
+					maximumFractionDigits: 2
+				}) ?? '0'}</span
+			> บาท</Card.Description
 		>
 	</Card.Header>
 	<Card.Content class="w-[370px] flex-1 justify-center">
@@ -47,7 +55,10 @@
 						dy={-32}
 					/>
 					<Text
-						value="฿ {dashboard.sumBudget - dashboard.sumExpense}"
+						value="฿ {(dashboard.sumBudget - dashboard.sumExpense)?.toLocaleString('th-TH', {
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 2
+						}) ?? '0'}"
 						textAnchor="middle"
 						verticalAnchor="middle"
 						class="fill-foreground text-2xl! font-bold"

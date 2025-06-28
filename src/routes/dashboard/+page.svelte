@@ -7,45 +7,124 @@
 	import RemainingAllocation from '../../components/chart/remaining-allocation.svelte';
 	import DateFilter from '../../components/filter/date-filter.svelte';
 	import TagFilter from '../../components/filter/tag-filter.svelte';
+	import { filterDate } from '../../lib/store.svelte.js';
+	import { getLocalTimeZone } from '@internationalized/date';
 	let auth = '';
 	const cookieString = document.cookie;
 	const match = cookieString.match(/auth=([^;]+)/);
 	if (match) {
 		auth = decodeURIComponent(match[1]);
 	}
-	function generateRandomData(count = 5) {
-		const tags = ['aa', 'bb', 'cc', 'dd', 'ee'];
-		const texts = ['Design', 'Development', 'Testing', 'Deployment', 'Review'];
+	let ganttchart = $state([]);
+	let ganttchartMap = $state([]);
+	let filteredGantt = $state([]);
 
-		const randomDate = () => {
-			const start = new Date();
-			const end = new Date();
-			start.setDate(start.getDate() + Math.floor(Math.random() * 30));
-			end.setDate(start.getDate() + Math.floor(Math.random() * 10) + 1);
-			return {
-				start: start.toISOString(),
-				end: end.toISOString()
-			};
-		};
-
-		const data = Array.from({ length: count }, (_, i) => {
-			const { start, end } = randomDate();
-			return {
-				id: `task_${i}_${Math.random().toString(36).substring(2, 10)}`,
-				text: texts[Math.floor(Math.random() * texts.length)],
-				start,
-				end,
-				duration: 0,
-				tag: tags[Math.floor(Math.random() * tags.length)]
-			};
+	function transformData(data) {
+		const formatter = new Intl.DateTimeFormat('th-TH', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric'
 		});
 
-		return data;
+		return data.map((item) => {
+			const end = new Date(item.end);
+			const endPlus = new Date(end);
+			const start = new Date(item.start);
+			endPlus.setDate(end.getDate() + 1);
+
+			return {
+				...item,
+				startF: formatter.format(start),
+				end: endPlus.toISOString(),
+				endF: formatter.format(end)
+			};
+		});
 	}
 
-	// ตัวอย่างการใช้งาน
-	let ganttchart = [];
-	let dashboard = [];
+	$effect(() => (ganttchartMap = transformData(filteredGantt)));
+
+	$effect(() => {
+		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
+		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
+
+		if (!start || !end) {
+			filteredGantt = ganttchart;
+			return;
+		}
+
+		filteredGantt = ganttchart.filter((task) => {
+			const taskStart = new Date(task.start);
+			const taskEnd = new Date(task.end);
+
+			return taskStart <= end && taskEnd >= start;
+		});
+	});
+
+	let dashboard = $state({});
+	let project = $state([]);
+	let filterProject = $state([]);
+
+	$effect(() => {
+		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
+		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
+
+		if (!start || !end) {
+			filterProject = project;
+			return;
+		}
+
+		filterProject = project.filter((task) => {
+			const taskStart = new Date(task.startDate);
+			const taskEnd = new Date(task.endDate);
+
+			return taskStart <= end && taskEnd >= start;
+		});
+	});
+
+	$effect(() => {
+		const sumBudget = filterProject.reduce((sum, proj) => sum + proj.budget, 0);
+		const sumExpense = filterProject.reduce((sum, proj) => sum + proj.expense, 0);
+
+		const tag_budget = filterProject.reduce((arr, proj) => {
+			const tags = proj.tags?.map((t) => t.name) ?? ['other'];
+
+			tags.forEach((tag) => {
+				const index = arr.findIndex((item) => item.tag === tag);
+
+				if (index === -1) {
+					arr.push({ tag, budget: proj.budget });
+				} else {
+					arr[index].budget += proj.budget;
+				}
+			});
+
+			return arr;
+		}, []);
+
+		const tag_expense = filterProject.reduce((arr, proj) => {
+			const tags = proj.tags?.map((t) => t.name) ?? ['other'];
+
+			tags.forEach((tag) => {
+				const index = arr.findIndex((item) => item.tag === tag);
+
+				if (index === -1) {
+					arr.push({ tag, expense: proj.expense });
+				} else {
+					arr[index].expense += proj.expense;
+				}
+			});
+
+			return arr;
+		}, []);
+
+		Object.assign(dashboard, {
+			sumBudget,
+			sumExpense,
+			tag_budget,
+			tag_expense
+		});
+	});
+
 	onMount(async () => {
 		/* fetch data for ganttchart */
 		try {
@@ -57,13 +136,13 @@
 
 			const json = await response.json();
 			ganttchart = [...json];
+			filteredGantt = [...json];
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
 
-		/* fetch data for dashboard */
 		try {
-			const response = await fetch(`${API_BASE_URL}/v2/dashboard/project`, {
+			const response = await fetch(`${API_BASE_URL}/v2/projects`, {
 				headers: {
 					Authorization: auth
 				}
@@ -71,7 +150,7 @@
 
 			const json = await response.json();
 			console.log('Dashboard data:', auth);
-			dashboard = { ...json };
+			project = json;
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
@@ -85,15 +164,15 @@
 		<TagFilter />
 	</section>
 	<section class="h-[650px] overflow-y-auto rounded-md border bg-white">
-		{#if ganttchart.length > 0}
-			<GanttChart {ganttchart} />
-		{:else}
-			<p class="flex h-full items-center justify-center text-xl">Loading Gantt chart...</p>
-		{/if}
+		{#key filteredGantt}
+			<GanttChart {ganttchartMap} />
+		{/key}
 	</section>
-	<section class="flex flex-wrap justify-between">
-		<RemainingAllocation {dashboard} />
-		<BudgetAllocation {dashboard} />
-		<ExpensesAllocation {dashboard} />
+	<section class="flex flex-wrap justify-evenly">
+		{#key dashboard}
+			<RemainingAllocation {dashboard} />
+			<BudgetAllocation {dashboard} />
+			<ExpensesAllocation {dashboard} />
+		{/key}
 	</section>
 </div>

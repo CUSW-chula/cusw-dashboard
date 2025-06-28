@@ -9,19 +9,30 @@
 	} from '@internationalized/date';
 	import { cn } from '$lib/utils.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import { RangeCalendar } from '$lib/components/ui/range-calendar/index.js';
+	import { RangeCalendar } from '$lib/components/ui/range-calendar/index2.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
+	import { filterDate } from '$lib/store.svelte.js';
+	import { parseDate } from '@internationalized/date';
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'medium'
 	});
 
 	let value: DateRange = $state({
-		start: new CalendarDate(2022, 1, 20),
-		end: new CalendarDate(2022, 1, 20).add({ days: 20 })
+		start: parseDate(`${new Date().getFullYear() - 1}-10-01`),
+		end: parseDate(`${new Date().getFullYear()}-09-30`)
 	});
 
 	let startValue: DateValue | undefined = $state(undefined);
+
+	$effect(() => {
+		filterDate.set({
+			date: {
+				start: value.start,
+				end: value.end
+			}
+		});
+	});
 </script>
 
 <div class="grid gap-2">

@@ -6,6 +6,8 @@
 	import { get } from 'svelte/store';
 	import DateFilter from '../../../components/filter/date-filter.svelte';
 	import TagFilter from '../../../components/filter/tag-filter.svelte';
+	import { filterDate } from '../../../lib/store.svelte.js';
+	import { getLocalTimeZone } from '@internationalized/date';
 
 	let auth = '';
 	const cookieString = document.cookie;
@@ -13,9 +15,55 @@
 	if (match) {
 		auth = decodeURIComponent(match[1]);
 	}
-	let ganttchart = [];
 	const { params } = get(page);
 	const projectId = params.project_id;
+
+	let ganttchart = $state([]);
+	let ganttchartMap = $state([]);
+	let filteredGantt = $state([]);
+
+	function transformData(data) {
+		const formatter = new Intl.DateTimeFormat('th-TH', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric'
+		});
+
+		return data.map((item) => {
+			const end = new Date(item.end);
+			const endPlus = new Date(end);
+			const start = new Date(item.start);
+			endPlus.setDate(end.getDate() + 1);
+
+			return {
+				...item,
+				startF: formatter.format(start),
+				end: endPlus.toISOString(),
+				endF: formatter.format(end),
+				parent: item.parentId
+			};
+		});
+	}
+
+	$effect(() => (ganttchartMap = transformData(filteredGantt)));
+
+	$effect(() => {
+		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
+		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
+
+		if (!start || !end) {
+			filteredGantt = ganttchart;
+			return;
+		}
+
+		filteredGantt = ganttchart.filter((task) => {
+			const taskStart = new Date(task.start);
+			const taskEnd = new Date(task.end);
+
+			return taskStart <= end && taskEnd >= start;
+		});
+	});
+
 	onMount(async () => {
 		try {
 			const response = await fetch(`${API_BASE_URL}/v2/ganttchart/${projectId}`, {
@@ -38,10 +86,8 @@
 		<TagFilter />
 	</section>
 	<section class="h-[650px] overflow-y-auto rounded-md border bg-white">
-		{#if ganttchart.length > 0}
-			<GanttChart {ganttchart} />
-		{:else}
-			<p class="flex h-full items-center justify-center text-xl">Loading Gantt chart...</p>
-		{/if}
+		{#key ganttchartMap}
+			<GanttChart {ganttchartMap} />
+		{/key}
 	</section>
 </div>
