@@ -25,8 +25,7 @@ COPY --from=base /app/.svelte-kit ./.svelte-kit
 COPY --from=base /app/package.json ./
 COPY --from=base /app/node_modules ./node_modules
 
-# Expose port 5432
-EXPOSE 5431
+EXPOSE 4173
 
 # Set environment variables
 ENV NODE_ENV=production
