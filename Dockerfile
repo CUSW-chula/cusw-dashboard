@@ -30,7 +30,7 @@ EXPOSE 5431
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV PORT=5431
+ENV PORT=4173
 ENV HOST=0.0.0.0
 
 # Start the application
