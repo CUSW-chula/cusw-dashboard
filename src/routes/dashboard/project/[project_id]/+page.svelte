@@ -1,12 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import GanttChart from '../../../components/gantt-chart.svelte';
-	import { API_BASE_URL } from '../../../lib/shared.js';
+	import GanttChart from '../../../../components/gantt-chart.svelte';
+	import { API_BASE_URL } from '../../../../lib/shared.js';
 	import { page } from '$app/stores';
 	import { get } from 'svelte/store';
-	import DateFilter from '../../../components/filter/date-filter.svelte';
-	import TagFilter from '../../../components/filter/tag-filter.svelte';
-	import { filterDate } from '../../../lib/store.svelte.js';
+	import DateFilter from '../../../../components/filter/date-filter.svelte';
+	import TagFilter from '../../../../components/filter/tag-filter.svelte';
+	import { filterDate } from '../../../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
 
 	let auth = '';

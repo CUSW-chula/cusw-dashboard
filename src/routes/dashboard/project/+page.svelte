@@ -1,13 +1,13 @@
 <script>
 	import { onMount } from 'svelte';
-	import GanttChart from '../../components/gantt-chart.svelte';
-	import { API_BASE_URL } from '../../lib/shared.js';
-	import BudgetAllocation from '../../components/chart/budget-allocation.svelte';
-	import ExpensesAllocation from '../../components/chart/expenses-allocation.svelte';
-	import RemainingAllocation from '../../components/chart/remaining-allocation.svelte';
-	import DateFilter from '../../components/filter/date-filter.svelte';
-	import TagFilter from '../../components/filter/tag-filter.svelte';
-	import { filterDate } from '../../lib/store.svelte.js';
+	import GanttChart from '../../../components/gantt-chart.svelte';
+	import { API_BASE_URL } from '../../../lib/shared.js';
+	import BudgetAllocation from '../../../components/chart/budget-allocation.svelte';
+	import ExpensesAllocation from '../../../components/chart/expenses-allocation.svelte';
+	import RemainingAllocation from '../../../components/chart/remaining-allocation.svelte';
+	import DateFilter from '../../../components/filter/date-filter.svelte';
+	import TagFilter from '../../../components/filter/tag-filter.svelte';
+	import { filterDate } from '../../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
 	let auth = '';
 	const cookieString = document.cookie;
@@ -149,7 +149,6 @@
 			});
 
 			const json = await response.json();
-			console.log('Dashboard data:', auth);
 			project = json;
 		} catch (error) {
 			console.log('Fetch error:', error);
