@@ -128,7 +128,7 @@
 	onMount(async () => {
 		/* fetch data for ganttchart */
 		try {
-			const response = await fetch(`${API_BASE_URL}/v2/ganttchart/project/`, {
+			const response = await fetch(`${API_BASE_URL}/v2/ganttchart/project`, {
 				headers: {
 					Authorization: auth
 				}
