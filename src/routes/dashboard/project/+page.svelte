@@ -25,29 +25,47 @@
 			month: '2-digit',
 			year: 'numeric'
 		});
+		const isoFormatter = (date) => date.toISOString().split('T')[0];
 
-		return data.map((item) => {
-			const end = new Date(item.end);
-			const endPlus = new Date(end);
+		let minStart = null;
+		let maxEnd = null;
+
+		const projects = [];
+
+		for (const item of data) {
+			if (!item.start || !item.end) continue;
+
 			const start = new Date(item.start);
+			const end = new Date(item.end);
+			if (isNaN(start) || isNaN(end)) continue;
+
+			const endPlus = new Date(end);
 			endPlus.setDate(end.getDate() + 1);
 
-			return {
+			// Update min/max
+			if (!minStart || start < minStart) minStart = start;
+			if (!maxEnd || endPlus > maxEnd) maxEnd = endPlus;
+
+			projects.push({
 				...item,
 				startF: formatter.format(start),
-				end: endPlus.toISOString(),
-				endF: formatter.format(end)
-			};
-		});
-	}
+				endF: formatter.format(end),
+				end: endPlus.toISOString()
+			});
+		}
 
-	$effect(() => (ganttchartMap = transformData(filteredGantt)));
+		return {
+			projects,
+			fDate: minStart ? isoFormatter(minStart) : null,
+			lDate: maxEnd ? isoFormatter(maxEnd) : null
+		};
+	}
 
 	$effect(() => {
 		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
 		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
 
-		if (!start || !end) {
+		if (!start && !end) {
 			filteredGantt = ganttchart;
 			return;
 		}
@@ -59,6 +77,8 @@
 			return taskStart <= end && taskEnd >= start;
 		});
 	});
+
+	$effect(() => (ganttchartMap = transformData(filteredGantt)));
 
 	let dashboard = $state({});
 	let project = $state([]);

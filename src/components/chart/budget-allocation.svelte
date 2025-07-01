@@ -33,8 +33,8 @@
 	);
 </script>
 
-<Card.Root class="flex flex-col">
-	<Card.Header class="items-center justify-center gap-4 text-center">
+<Card.Root class="flex max-w-[372px] flex-col">
+	<Card.Header class="flex min-h-[62px] flex-col items-center justify-start gap-1 text-center">
 		<Card.Title>การจัดสรรงบประมาณ</Card.Title>
 		<Card.Description class="text-black"
 			>งบประมาณทั้งหมด {dashboard.sumBudget?.toLocaleString('th-TH', {
@@ -71,7 +71,7 @@
 			{/if}
 		</Chart.Container>
 	</Card.Content>
-	<Card.Footer class="flex flex-wrap justify-center gap-2 text-sm">
+	<Card.Footer class="flex max-w-[370px] flex-wrap items-start justify-center gap-2 text-sm">
 		{#each chartData() as item}
 			<legend class="flex items-center gap-1">
 				<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />

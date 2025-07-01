@@ -2,8 +2,9 @@
 	import { Gantt } from 'wx-svelte-gantt';
 	import { Willow } from 'wx-svelte-gantt';
 
-	export let ganttchartMap;
-	const tasks = ganttchartMap;
+	let { ganttchartMap } = $props();
+
+	const tasks = ganttchartMap.projects;
 
 	const columns = [
 		{ id: 'text', header: 'Task name', flexgrow: 2 },
@@ -33,8 +34,8 @@
 		level: 2,
 		levels: [
 			{
-				minCellWidth: 250,
-				maxCellWidth: 350,
+				minCellWidth: 150,
+				maxCellWidth: 250,
 				scales: [
 					{ unit: 'year', step: 1, format: 'yyyy' },
 					{ unit: 'month', step: 1, format: 'MMMM' }
@@ -62,5 +63,6 @@
 		{readonly}
 		scales={complexScales}
 		{lengthUnit}
+		start={ganttchartMap.fDate}
 	/>
 </Willow>
