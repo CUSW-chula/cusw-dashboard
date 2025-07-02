@@ -15,19 +15,24 @@
 </script>
 
 <Card.Root class="flex flex-col">
-	<Card.Header class="items-center justify-center gap-4 text-center">
+	<Card.Header class="items-center justify-center text-center">
 		<Card.Title>การจัดสรรงบคงเหลือ</Card.Title>
-		<Card.Description class="text-black"
-			>งบประมาณ {dashboard.sumBudget?.toLocaleString('th-TH', {
-				minimumFractionDigits: 2,
-				maximumFractionDigits: 2
-			}) ?? '0'} บาท ค่าใช้จ่าย
-			<span class="text-red-500">
-				{dashboard.sumExpense?.toLocaleString('th-TH', {
+		<Card.Description class="flex flex-wrap items-center justify-center text-center text-black "
+			><p>
+				งบประมาณ {dashboard.sumBudget?.toLocaleString('th-TH', {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2
-				}) ?? '0'}</span
-			> บาท</Card.Description
+				}) ?? '0'} บาท
+			</p>
+			<p>
+				ค่าใช้จ่าย
+				<span class="text-red-500">
+					{dashboard.sumExpense?.toLocaleString('th-TH', {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2
+					}) ?? '0'}</span
+				> บาท
+			</p></Card.Description
 		>
 	</Card.Header>
 	<Card.Content class="w-[370px] flex-1 justify-center">
@@ -71,7 +76,7 @@
 			</PieChart>
 		</Chart.Container>
 	</Card.Content>
-	<Card.Footer class="flex justify-center gap-2 text-sm">
+	<Card.Footer class="flex h-full items-start justify-center gap-2 text-sm ">
 		<legend class="flex items-center gap-1"
 			><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.budget.label}
 			{((dashboard.sumBudget / (dashboard.sumBudget + dashboard.sumExpense)) * 100).toFixed(2)} %</legend
