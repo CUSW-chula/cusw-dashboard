@@ -33,7 +33,7 @@
 	);
 </script>
 
-<Card.Root class="flex max-w-[372px] flex-col">
+<Card.Root class="flex min-h-[430px] max-w-[372px] flex-col">
 	<Card.Header class="flex min-h-[62px] flex-col items-center justify-start gap-1 text-center">
 		<Card.Title>การจัดสรรงบประมาณ</Card.Title>
 		<Card.Description class="text-black"
@@ -67,7 +67,7 @@
 					{/snippet}
 				</PieChart>
 			{:else}
-				<p class="text-center text-gray-500">ไม่พบข้อมูล</p>
+				<p class="text-center text-sm text-gray-500">กรุณาเลือกแท็ก</p>
 			{/if}
 		</Chart.Container>
 	</Card.Content>
