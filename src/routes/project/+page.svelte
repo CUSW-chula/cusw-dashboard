@@ -20,7 +20,7 @@
 	let filteredGantt = $state([]);
 
 	function transformData(data) {
-		const formatter = new Intl.DateTimeFormat('en-US', {
+		const formatter = new Intl.DateTimeFormat('en-GB', {
 			day: '2-digit',
 			month: '2-digit',
 			year: 'numeric'
@@ -80,9 +80,10 @@
 
 	$effect(() => (ganttchartMap = transformData(filteredGantt)));
 
-	let dashboard = $state({});
-	let project = $state([]);
-	let filterProject = $state([]);
+	let project = $state([]); // all projects fetched from the API
+	let filterProject = $state([]); // projects filtered by date
+	let dashboard = $state({}); //new dashboard object
+	let filterTag = $state([]); // tags filtered
 
 	$effect(() => {
 		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
@@ -102,6 +103,10 @@
 	});
 
 	$effect(() => {
+		if (filterTag.length === 0) {
+			dashboard = {};
+			return;
+		}
 		const sumBudget = filterProject.reduce((sum, proj) => sum + proj.budget, 0);
 		const sumExpense = filterProject.reduce((sum, proj) => sum + proj.expense, 0);
 
@@ -146,7 +151,7 @@
 	});
 
 	onMount(async () => {
-		/* fetch data for ganttchart */
+		/* fetch data for ganttchart and all projects*/
 		try {
 			const response = await fetch(`${API_BASE_URL}/v2/ganttchart/project`, {
 				headers: {
