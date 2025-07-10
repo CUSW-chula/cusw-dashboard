@@ -6,6 +6,7 @@
 @theme {
 	--font-Baijamjuree: 'Bai jamjuree', 'sans-serif';
 	--font-Anuphan: 'Anuphan', 'sans-serif';
+	--color-brown: #6B5C56;
 }
 :root {
 	--radius: 0.625rem;

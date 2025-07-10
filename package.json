@@ -42,7 +42,7 @@
 		"@sveltejs/package": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/vite": "^4.0.0",
-		"bits-ui": "^2.8.4",
+		"bits-ui": "^2.8.6",
 		"clsx": "^2.1.1",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
@@ -58,7 +58,7 @@
 		"tailwind-merge": "^3.3.1",
 		"tailwind-variants": "^1.0.0",
 		"tailwindcss": "^4.0.0",
-		"tw-animate-css": "^1.3.4",
+		"tw-animate-css": "^1.3.5",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.20.0",
 		"vite": "^6.2.6",
@@ -68,6 +68,7 @@
 		"svelte"
 	],
 	"dependencies": {
+		"jwt-decode": "^4.0.0",
 		"lucide-svelte": "^0.522.0",
 		"wx-svelte-gantt": "^2.1.1"
 	}
