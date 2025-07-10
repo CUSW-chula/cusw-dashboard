@@ -14,6 +14,9 @@ const config = {
 		adapter: adapter(),
 		paths: {
 			base: '/dashboard'
+		},
+		alias: {
+			'@/*': './path/to/lib/*'
 		}
 	}
 };
