@@ -26,11 +26,12 @@
 	let startValue: DateValue | undefined = $state(undefined);
 
 	function resetDate() {
-		value = {
-			start: undefined,
-			end: undefined
-		};
-		startValue = undefined;
+		filterDate.set({
+			date: {
+				start: undefined,
+				end: undefined
+			}
+		});
 	}
 	function applyDate() {
 		filterDate.set({
