@@ -8,15 +8,11 @@ export default defineConfig({
 	server: {
 		port: 4173,
 		host: '0.0.0.0',
-		hmr: {
-			host: 'cusw-workspace.sa.chula.ac.th'
-		},
+		hmr: { host: 'cusw-workspace.sa.chula.ac.th' },
 		allowedHosts: true
 	},
 	preview: {
-		headers: {
-			'Access-Control-Allow-Origin': '*'
-		},
+		headers: { 'Access-Control-Allow-Origin': '*' },
 		port: 4173,
 		host: 'https://cusw-workspace.sa.chula.ac.th',
 		allowedHosts: true
