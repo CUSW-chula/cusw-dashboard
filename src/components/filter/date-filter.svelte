@@ -52,7 +52,7 @@
 				'border-brown text-brown h-[40px] w-[240px] justify-start rounded-[6px]'
 			)}
 		>
-			<CalendarIcon class="mr-2 size-4 font-normal" />
+			<CalendarIcon class="size-4 font-normal" />
 			{#if value && value.start}
 				{#if value.end}
 					{df.format(value.start.toDate(getLocalTimeZone()))} - {df.format(
