@@ -32,6 +32,10 @@
 				end: undefined
 			}
 		});
+		value = {
+			start: undefined,
+			end: undefined
+		};
 	}
 	function applyDate() {
 		filterDate.set({
