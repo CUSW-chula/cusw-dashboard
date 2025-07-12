@@ -17,7 +17,9 @@
 	}
 	let ganttchart = $state([]);
 	let ganttchartMap = $state([]);
+	let filterProject = $state([]); // projects filtered by date
 	let filteredGantt = $state([]);
+	let filterTag = $state([]); // tags filtered
 
 	function transformData(data) {
 		const formatter = new Intl.DateTimeFormat('en-GB', {
@@ -67,6 +69,7 @@
 		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
 		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
 		const tags = $filterGanttTag;
+		filterTag = tags; // Update the filterTag store with selected tags; Hook to dashboard.
 
 		if (!start && !end && tags.length === 0) {
 			filteredGantt = ganttchart;
@@ -99,29 +102,45 @@
 	$effect(() => (ganttchartMap = transformData(filteredGantt)));
 
 	let project = $state([]); // all projects fetched from the API
-	let filterProject = $state([]); // projects filtered by date
 	let dashboard = $state({}); //new dashboard object
-	let filterTag = $state([]); // tags filtered
 
 	$effect(() => {
 		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
 		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
+		const tags = $filterGanttTag;
 
-		if (!start || !end) {
+		if (!start && !end && tags.length === 0) {
 			filterProject = project;
 			return;
 		}
 
-		filterProject = project.filter((task) => {
-			const taskStart = new Date(task.startDate);
-			const taskEnd = new Date(task.endDate);
+		filterProject = project.filter((proj) => {
+			const projStart = new Date(proj.startDate);
+			const projEnd = new Date(proj.endDate);
+			const projTags = proj.tags.map((t) => t.name);
+			let filterDateBool = true;
+			// console.log('proj', proj, projStart, projEnd, projTags);
 
-			return taskStart <= end && taskEnd >= start;
+			// Handling date filtering
+			if (!start) {
+				if (!projStart) {
+					filterDateBool = false;
+				} else if (!projEnd) {
+					filterDateBool = start <= projStart && projStart <= end;
+				} else if (projStart > end || projEnd < start) {
+					filterDateBool = false;
+				}
+			}
+
+			const bool =
+				filterDateBool && (projTags.some((tag) => tags.includes(tag)) || tags.length === 0);
+			console.log('bool', bool, projTags, tags);
+			return bool;
 		});
 	});
 
 	$effect(() => {
-		if (filterTag.length === 0) {
+		if (filterProject.length === 0) {
 			dashboard = {};
 			return;
 		}
@@ -192,26 +211,27 @@
 			});
 
 			const json = await response.json();
-			project = json;
+			project = [...json];
+			console.log('project', project);
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
 
 		/* fetch data*/
 		try {
-			const response = await fetch(`${API_BASE_URL}/v2/tags`, {
+			const response = await fetch(`${API_BASE_URL}/v2/tags/`, {
 				headers: {
 					Authorization: auth
 				}
 			});
 
 			const json = await response.json();
-			filterTag = json
+			const temp = json
 				.filter((tag) => {
 					if (tag.isProject) return tag;
 				})
 				.map((tag) => tag.name);
-			tagsList.set(filterTag);
+			tagsList.set(temp);
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
