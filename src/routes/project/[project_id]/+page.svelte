@@ -18,6 +18,7 @@
 	const { params } = get(page);
 	const projectId = params.project_id;
 
+	let project = $state([]); // all projects fetched from the API
 	let ganttchart = $state([]);
 	let ganttchartMap = $state([]);
 	let filteredGantt = $state([]);
@@ -96,11 +97,23 @@
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
+		try {
+			const response = await fetch(`${API_BASE_URL}/v2/projects/${projectId}`, {
+				headers: {
+					Authorization: auth
+				}
+			});
+
+			const json = await response.json();
+			project = json;
+		} catch (error) {
+			console.log('Fetch error:', error);
+		}
 	});
 </script>
 
 <div class="flex flex-col gap-4 px-20">
-	<h1 class="font-Anuphan text-5xl font-semibold">Dashboard</h1>
+	<h1 class="font-Anuphan text-5xl font-semibold">{project.title}</h1>
 	<section class="flex flex-wrap gap-2">
 		<DateFilter />
 		<TagFilter />
