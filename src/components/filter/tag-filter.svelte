@@ -3,28 +3,25 @@
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
-	import { tagsList, filterTag } from '$lib/store.svelte.js';
+	import { tagsList, filterGanttTag } from '$lib/store.svelte.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Check } from 'lucide-svelte';
 
 	/** Prop: ฟังก์ชัน callback เมื่อ tag เปลี่ยน */
 	export let onSelectTagChange: (values: string[]) => void = () => {};
-
 	// local state
 	const selectedValues = writable<string[]>([]);
 	const isPopoverOpen = writable(false);
 	let inputValue = '';
-
 	// ---- side effects ----
 	// 1) sync ไป global filterTag / callback parent
 	selectedValues.subscribe((vals) => {
-		filterTag.set(vals);
+		filterGanttTag.set(vals);
 		onSelectTagChange(vals);
 	});
 
 	// ---- helper ----
 	function toggleOption(val: string) {
-		console.log('toggleOption', val);
 		selectedValues.update((cur) =>
 			cur.includes(val) ? cur.filter((v) => v !== val) : [...cur, val]
 		);
@@ -59,7 +56,7 @@
                    text-sm font-bold={$selectedValues.length}
                    class:text-brown font-normal={!$selectedValues.length}"
 			>
-				Filter {$selectedValues.length} tag(s)
+				Select {$selectedValues.length} tag(s)
 			</span>
 		</Button>
 	</Popover.Trigger>
@@ -124,16 +121,21 @@
 				<!-- footer -->
 				<div class="flex justify-between">
 					{#if $selectedValues.length}
-						<Command.Item on:select={handleClear} class="flex-1 cursor-pointer justify-center">
+						<button
+							on:click={handleClear}
+							class="flex-1 cursor-pointer justify-center"
+							type="button"
+						>
 							Clear
-						</Command.Item>
+						</button>
 					{/if}
-					<Command.Item
+					<button
 						on:click={() => isPopoverOpen.set(false)}
 						class="flex-1 cursor-pointer justify-center"
+						type="button"
 					>
 						Close
-					</Command.Item>
+					</button>
 				</div>
 			</Command.List>
 		</Command.Root>

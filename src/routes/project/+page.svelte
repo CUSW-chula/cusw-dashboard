@@ -7,7 +7,7 @@
 	import RemainingAllocation from '../../components/chart/remaining-allocation.svelte';
 	import DateFilter from '../../components/filter/date-filter.svelte';
 	import TagFilter from '../../components/filter/tag-filter.svelte';
-	import { filterDate } from '../../lib/store.svelte.js';
+	import { filterDate, tagsList, filterGanttTag } from '../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
 	let auth = '';
 	const cookieString = document.cookie;
@@ -61,20 +61,38 @@
 		};
 	}
 
+	// ---- side effects ----
+	// Handling filtering of gantt chart data based on date and tags
 	$effect(() => {
 		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
 		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
+		const tags = $filterGanttTag;
 
-		if (!start && !end) {
+		if (!start && !end && tags.length === 0) {
 			filteredGantt = ganttchart;
 			return;
 		}
 
-		filteredGantt = ganttchart.filter((task) => {
-			const taskStart = new Date(task.start);
-			const taskEnd = new Date(task.end);
+		filteredGantt = ganttchart.filter((proj) => {
+			const projStart = new Date(proj.start);
+			const projEnd = new Date(proj.end);
+			const projTags = proj.tag;
+			let filterDateBool = true;
 
-			return taskStart <= end && taskEnd >= start;
+			// Handling date filtering
+			if (!start) {
+				if (!projStart) {
+					filterDateBool = false;
+				} else if (!projEnd) {
+					filterDateBool = start <= projStart && projStart <= end;
+				} else if (projStart > end || projEnd < start) {
+					filterDateBool = false;
+				}
+			}
+
+			const bool =
+				filterDateBool && (projTags.some((tag) => tags.includes(tag)) || tags.length === 0);
+			return bool;
 		});
 	});
 
@@ -175,6 +193,25 @@
 
 			const json = await response.json();
 			project = json;
+		} catch (error) {
+			console.log('Fetch error:', error);
+		}
+
+		/* fetch data*/
+		try {
+			const response = await fetch(`${API_BASE_URL}/v2/tags`, {
+				headers: {
+					Authorization: auth
+				}
+			});
+
+			const json = await response.json();
+			filterTag = json
+				.filter((tag) => {
+					if (tag.isProject) return tag;
+				})
+				.map((tag) => tag.name);
+			tagsList.set(filterTag);
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
