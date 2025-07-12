@@ -199,7 +199,7 @@
 
 		/* fetch data*/
 		try {
-			const response = await fetch(`${API_BASE_URL}/v2/tags`, {
+			const response = await fetch(`${API_BASE_URL}/v2/tags/`, {
 				headers: {
 					Authorization: auth
 				}
