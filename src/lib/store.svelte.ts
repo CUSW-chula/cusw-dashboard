@@ -12,5 +12,5 @@ export const filterDate = writable<{
 		end: undefined
 	}
 });
-export const filterTag = writable<string[]>([]);
+export const filterGanttTag = writable<string[]>([]);
 export const tagsList = writable<string[]>([]);
