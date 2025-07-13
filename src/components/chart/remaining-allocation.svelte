@@ -40,8 +40,8 @@
 			<Chart.Container config={chartConfig} class="mx-auto aspect-square max-h-[250px]">
 				<PieChart
 					data={[
-						{ type: 'budget', money: dashboard.sumBudget, color: chartConfig.expense.color },
-						{ type: 'expense', money: dashboard.sumExpense, color: chartConfig.budget.color }
+						{ type: 'budget', money: dashboard.sumBudget, color: chartConfig.budget.color },
+						{ type: 'expense', money: dashboard.sumExpense, color: chartConfig.expense.color }
 					]}
 					key="type"
 					value="money"
