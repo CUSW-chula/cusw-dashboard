@@ -3,7 +3,7 @@
 	import { Redo2 } from 'lucide-svelte';
 
 	const handleClick = () => {
-		goto(`/dashboard`);
+		goto(`/dashboards`);
 	};
 </script>
 
