@@ -43,7 +43,7 @@
 			<Chart.Container config={chartConfig} class="mx-auto aspect-square max-h-[250px]">
 				<PieChart
 					data={[
-						{ type: 'budget', money: { overallMoney.sumBudget - overallMoney.sumExpense }, color: chartConfig.budget.color },
+						{ type: 'budget', money: overallMoney.sumBudget - overallMoney.sumExpense, color: chartConfig.budget.color },
 						{ type: 'expense', money: overallMoney.sumExpense, color: chartConfig.expense.color }
 					]}
 					key="type"
