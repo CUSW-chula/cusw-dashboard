@@ -84,7 +84,7 @@
 			let filterDateBool = true;
 
 			// Handling date filtering
-			if (!start) {
+			if (start) {
 				if (!projStart) {
 					filterDateBool = false;
 				} else if (!projEnd) {
@@ -123,7 +123,7 @@
 			// console.log('proj', proj, projStart, projEnd, projTags);
 
 			// Handling date filtering
-			if (!start) {
+			if (start) {
 				if (!projStart) {
 					filterDateBool = false;
 				} else if (!projEnd) {
@@ -135,7 +135,7 @@
 
 			const bool =
 				filterDateBool && (projTags.some((tag) => tags.includes(tag)) || tags.length === 0);
-			console.log('bool', bool, projTags, tags);
+			// console.log('bool', bool, projTags, tags);
 			return bool;
 		});
 	});
