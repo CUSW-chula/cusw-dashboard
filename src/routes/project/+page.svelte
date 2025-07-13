@@ -258,7 +258,7 @@
 		{/key}
 	</section>
 	<h2 class="font-Anuphan text-3xl font-semibold">Money Allocation</h2>
-	<section class="flex flex-wrap justify-evenly">
+	<section class="grid grid-cols-3 gap-3 px-20">
 		{#key dashboard}
 			<RemainingAllocation {dashboard} />
 			<BudgetAllocation {dashboard} />
