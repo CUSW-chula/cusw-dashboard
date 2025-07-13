@@ -7,7 +7,7 @@
 	import DateFilter from '../../../components/filter/date-filter.svelte';
 	import TagFilter from '../../../components/filter/tag-filter.svelte';
 	import { filterDate } from '../../../lib/store.svelte.js';
-	import { filterGanttTag, tagsList } from '../../../lib/store.svelte.ts';
+	import { filterGanttTag, tagsList } from '../../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
 
 	let auth = '';
