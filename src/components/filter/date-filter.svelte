@@ -9,8 +9,9 @@
 	} from '@internationalized/date';
 	import { cn } from '$lib/utils.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
-	import { RangeCalendar } from '$lib/components/ui/range-calendar/index.js';
+	import { RangeCalendar } from '$lib/components/ui/range-calendar/index2.js';
 	import * as Popover from '$lib/components/ui/popover/index.js';
+	import { filterDate } from '$lib/store.svelte.js';
 	import { parseDate } from '@internationalized/date';
 
 	const df = new DateFormatter('en-US', {
@@ -18,64 +19,44 @@
 	});
 
 	let value: DateRange = $state({
-		start: undefined,
-		end: undefined
+		start: parseDate(`${new Date().getFullYear() - 1}-10-01`),
+		end: parseDate(`${new Date().getFullYear()}-09-30`)
 	});
 
 	let startValue: DateValue | undefined = $state(undefined);
-	let endValue: DateValue | undefined = $state(undefined);
 
-	let currentYear = $state(new Date().getFullYear());
-	let currentMonth = $state(new Date().getMonth() + 1);
-
-	const years = Array.from({ length: 10 }, (_, i) => currentYear - 5 + i);
-	const months = [
-		{ value: 1, label: 'January' },
-		{ value: 2, label: 'February' },
-		{ value: 3, label: 'March' },
-		{ value: 4, label: 'April' },
-		{ value: 5, label: 'May' },
-		{ value: 6, label: 'June' },
-		{ value: 7, label: 'July' },
-		{ value: 8, label: 'August' },
-		{ value: 9, label: 'September' },
-		{ value: 10, label: 'October' },
-		{ value: 11, label: 'November' },
-		{ value: 12, label: 'December' }
-	];
-
-	const handleValueChange = (dateRange: DateRange) => {
-		startValue = dateRange.start;
-		endValue = dateRange.end;
-		console.log('Selected Range:', {
-			start: startValue ? startValue.toDate(getLocalTimeZone()) : null,
-			end: endValue ? endValue.toDate(getLocalTimeZone()) : null
-		});
-	};
-	function jumpAndUnselect() {
-		// 1️⃣ set วันที่ 1 เพื่อให้ calendar ข้ามไปเดือนนั้น
-		const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-01`;
-		value = {
-			start: parseDate(dateStr),
-			end: undefined
-		};
-
-		// 2️⃣ unselct ทันทีหลัง render (next tick)
-		setTimeout(() => {
-			value = {
+	function resetDate() {
+		filterDate.set({
+			date: {
 				start: undefined,
 				end: undefined
-			};
-		}, 0);
+			}
+		});
+		value = {
+			start: undefined,
+			end: undefined
+		};
+	}
+	function applyDate() {
+		filterDate.set({
+			date: {
+				start: value.start,
+				end: value.end
+			}
+		});
 	}
 </script>
 
 <div class="grid gap-2">
 	<Popover.Root>
 		<Popover.Trigger
-			class={cn(buttonVariants({ variant: 'outline' }), !value && 'text-muted-foreground')}
+			class={cn(
+				buttonVariants({ variant: 'outline' }),
+				value && value.start ? 'font-bold' : 'font-normal',
+				'border-brown text-brown h-[40px] w-[240px] justify-start rounded-[6px]'
+			)}
 		>
-			<CalendarIcon class="mr-2 size-4" />
+			<CalendarIcon class="size-4 font-normal" />
 			{#if value && value.start}
 				{#if value.end}
 					{df.format(value.start.toDate(getLocalTimeZone()))} - {df.format(
@@ -87,25 +68,26 @@
 			{:else if startValue}
 				{df.format(startValue.toDate(getLocalTimeZone()))}
 			{:else}
-				Pick a date
+				Filter by date
 			{/if}
 		</Popover.Trigger>
 		<Popover.Content class="w-auto p-0" align="start">
-			<div class="mb-2 flex gap-2">
-				<select bind:value={currentMonth} on:change={jumpAndUnselect}>
-					{#each months as month}
-						<option value={month.value}>{month.label}</option>
-					{/each}
-				</select>
-
-				<select bind:value={currentYear} on:change={jumpAndUnselect}>
-					{#each years as year}
-						<option value={year}>{year}</option>
-					{/each}
-				</select>
+			<RangeCalendar
+				bind:value
+				onStartValueChange={(v) => {
+					startValue = v;
+				}}
+				numberOfMonths={2}
+			/>
+			<div class="flex justify-end gap-2 pr-2 pb-2">
+				<button
+					onclick={resetDate}
+					class="border-brown text-brown h-[32px] rounded-[6px] border px-2 text-sm">Reset</button
+				>
+				<button onclick={applyDate} class="bg-brown h-[32px] rounded-[6px] px-2 text-sm text-white"
+					>Apply</button
+				>
 			</div>
-
-			<RangeCalendar bind:value numberOfMonths={2} onValueChange={handleValueChange} />
 		</Popover.Content>
 	</Popover.Root>
 </div>

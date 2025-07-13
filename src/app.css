@@ -6,6 +6,15 @@
 @theme {
 	--font-Baijamjuree: 'Bai jamjuree', 'sans-serif';
 	--font-Anuphan: 'Anuphan', 'sans-serif';
+	--color-cream: #fffcf2;
+	--color-brown: #6b5c56;
+	--color-purple: #7e5bea;
+	--color-blue: #489cff;
+	--color-yellow: #f4be38;
+	--color-orange: #f79939;
+	--color-greenLight: #94d0bc;
+	--color-green: #69bca0;
+	--color-red: #ef4444;
 }
 :root {
 	--radius: 0.625rem;
