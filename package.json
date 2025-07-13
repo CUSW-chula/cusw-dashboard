@@ -4,12 +4,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",
-<<<<<<< HEAD
-		"preview": "vite preview",
-		"start": "vite preview --host 0.0.0.0 --port 3000",
-=======
 		"preview": "vite preview --host",
->>>>>>> 2a84401225e6a05949705351427de54639a6d50e
 		"prepare": "svelte-kit sync || echo ''",
 		"prepack": "svelte-kit sync && svelte-package && publint",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
