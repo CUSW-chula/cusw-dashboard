@@ -79,12 +79,12 @@
 		</Card.Content>
 		<Card.Footer class="flex h-full w-full items-start justify-center gap-2 text-sm ">
 			<legend class="flex items-center gap-1"
-				><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.budget
+				><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.budget
 					.label}
 				{((dashboard.sumBudget / (dashboard.sumBudget + dashboard.sumExpense)) * 100).toFixed(2)} %</legend
 			>
 			<legend class="flex items-center gap-1"
-				><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.expense
+				><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.expense
 					.label}
 				{((dashboard.sumExpense / (dashboard.sumBudget + dashboard.sumExpense)) * 100).toFixed(2)} %</legend
 			>

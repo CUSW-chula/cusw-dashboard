@@ -73,11 +73,13 @@
 	</Card.Content>
 	<Card.Footer class="flex w-full flex-wrap items-start justify-center gap-2 text-sm">
 		{#each chartData() as item}
-			<legend class="flex items-center gap-1">
-				<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
-				{item.tag}
-				{((item.budget / dashboard.sumBudget) * 100).toFixed(2)} %
-			</legend>
+			{#if item.budget > 0}
+				<legend class="flex items-center gap-1">
+					<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
+					{item.tag}
+					{((item.budget / dashboard.sumBudget) * 100).toFixed(2)} %
+				</legend>
+			{/if}
 		{/each}
 	</Card.Footer>
 </Card.Root>
