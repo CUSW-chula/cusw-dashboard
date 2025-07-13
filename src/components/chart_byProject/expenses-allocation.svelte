@@ -15,23 +15,23 @@
 	const chartData = $derived(() =>
 		dashboard.projectList
 			? [...dashboard.projectList]
-				.sort((a, b) => b.expense - a.expense)
-				.map((project, index) => ({
-				tag: project.projectName,
-				expense: project.expense,
-				color: getColorByIndex(index),
-				}))
+					.sort((a, b) => b.expense - a.expense)
+					.map((project, index) => ({
+						tag: project.projectName,
+						expense: project.expense,
+						color: getColorByIndex(index)
+					}))
 			: []
-		);
+	);
 
 	const chartConfig = $derived(
-	() =>
-		dashboard.projectList?.reduce((acc, project) => {
-		acc[project.projectName] = {
-			label: project.projectName,
-		};
-		return acc;
-		}, {}) satisfies Chart.ChartConfig
+		() =>
+			dashboard.projectList?.reduce((acc, project) => {
+				acc[project.projectName] = {
+					label: project.projectName
+				};
+				return acc;
+			}, {}) satisfies Chart.ChartConfig
 	);
 
 	// const chartData = $derived(() =>

@@ -35,9 +35,11 @@
 </script>
 
 <Card.Root class="flex min-h-[430px] w-full flex-col">
-	<Card.Header class="flex w-full min-h-[62px] flex-col items-center justify-start gap-1 text-center">
-		<Card.Title class="text-brown text-xl font-Anuphan">งบฯค่าใช้จ่ายจริงของโครงการ</Card.Title>
-		<Card.Description class="text-black font-Baijamjuree text-md"
+	<Card.Header
+		class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center"
+	>
+		<Card.Title class="text-brown font-Anuphan text-xl">งบฯค่าใช้จ่ายจริงของโครงการ</Card.Title>
+		<Card.Description class="font-Baijamjuree text-md text-black"
 			>ค่าใช้จ่ายทั้งหมด <span class="text-red-500"
 				>{dashboard.sumExpense?.toLocaleString('th-TH', {
 					minimumFractionDigits: 2,

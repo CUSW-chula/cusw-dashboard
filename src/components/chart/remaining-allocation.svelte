@@ -5,9 +5,9 @@
 	import { PieChart, Text } from 'layerchart';
 	import { Circle } from 'lucide-svelte';
 
-	let { dashboard } = $props();
+	let { overallMoney } = $props();
 
-	const chartData = [{ expense: dashboard.sumExpense, budget: dashboard.sumBudget }];
+	const chartData = [{ expense: overallMoney.sumExpense, budget: overallMoney.sumBudget }];
 	const chartConfig = {
 		budget: { label: 'เงินคงเหลือ', color: '#489CFF' },
 		expense: { label: 'ค่าใช้จ่าย', color: '#EF4444' }
@@ -15,11 +15,14 @@
 </script>
 
 <Card.Root class="flex min-h-[430px] w-full flex-col">
-	<Card.Header class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center">
-		<Card.Title class="text-brown text-xl font-Anuphan">ภาพรวมของงบฯโครงการ</Card.Title>
-		<Card.Description class="flex flex-wrap items-center justify-center text-center text-black font-Baijamjuree text-md gap-1"
+	<Card.Header
+		class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center"
+	>
+		<Card.Title class="text-brown font-Anuphan text-xl">ภาพรวมของงบฯโครงการ</Card.Title>
+		<Card.Description
+			class="font-Baijamjuree text-md flex flex-wrap items-center justify-center gap-1 text-center text-black"
 			><p>
-				เงินคงเหลือ {dashboard.sumBudget?.toLocaleString('th-TH', {
+				เงินคงเหลือ {overallMoney.sumBudget?.toLocaleString('th-TH', {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2
 				}) ?? '0'} บาท
@@ -27,7 +30,7 @@
 			<p>
 				ค่าใช้จ่าย
 				<span class="text-red-500">
-					{dashboard.sumExpense?.toLocaleString('th-TH', {
+					{overallMoney.sumExpense?.toLocaleString('th-TH', {
 						minimumFractionDigits: 2,
 						maximumFractionDigits: 2
 					}) ?? '0'}</span
@@ -35,13 +38,13 @@
 			</p></Card.Description
 		>
 	</Card.Header>
-	{#if dashboard?.tag_budget}
+	{#if overallMoney?.tag_budget}
 		<Card.Content class="w-full flex-1 justify-center">
 			<Chart.Container config={chartConfig} class="mx-auto aspect-square max-h-[250px]">
 				<PieChart
 					data={[
-						{ type: 'budget', money: dashboard.sumBudget, color: chartConfig.budget.color },
-						{ type: 'expense', money: dashboard.sumExpense, color: chartConfig.expense.color }
+						{ type: 'budget', money: overallMoney.sumBudget, color: chartConfig.budget.color },
+						{ type: 'expense', money: overallMoney.sumExpense, color: chartConfig.expense.color }
 					]}
 					key="type"
 					value="money"
@@ -61,10 +64,13 @@
 							dy={-32}
 						/>
 						<Text
-							value="฿ {(dashboard.sumBudget - dashboard.sumExpense)?.toLocaleString('th-TH', {
-								minimumFractionDigits: 2,
-								maximumFractionDigits: 2
-							}) ?? '0'}"
+							value="฿ {(overallMoney.sumBudget - overallMoney.sumExpense)?.toLocaleString(
+								'th-TH',
+								{
+									minimumFractionDigits: 2,
+									maximumFractionDigits: 2
+								}
+							) ?? '0'}"
 							textAnchor="middle"
 							verticalAnchor="middle"
 							class="fill-foreground text-2xl! font-bold"
@@ -81,12 +87,18 @@
 			<legend class="flex items-center gap-1"
 				><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.budget
 					.label}
-				{((dashboard.sumBudget / (dashboard.sumBudget + dashboard.sumExpense)) * 100).toFixed(2)} %</legend
+				{(
+					(overallMoney.sumBudget / (overallMoney.sumBudget + overallMoney.sumExpense)) *
+					100
+				).toFixed(2)} %</legend
 			>
 			<legend class="flex items-center gap-1"
 				><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.expense
 					.label}
-				{((dashboard.sumExpense / (dashboard.sumBudget + dashboard.sumExpense)) * 100).toFixed(2)} %</legend
+				{(
+					(overallMoney.sumExpense / (overallMoney.sumBudget + overallMoney.sumExpense)) *
+					100
+				).toFixed(2)} %</legend
 			>
 		</Card.Footer>
 	{:else}
