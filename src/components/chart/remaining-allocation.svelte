@@ -22,7 +22,7 @@
 		<Card.Description
 			class="font-Baijamjuree text-md flex flex-wrap items-center justify-center gap-1 text-center text-black"
 			><p>
-				เงินคงเหลือ {overallMoney.sumBudget?.toLocaleString('th-TH', {
+				งบฯโครงการ {overallMoney.sumBudget?.toLocaleString('th-TH', {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2
 				}) ?? '0'} บาท
