@@ -87,7 +87,7 @@
 			let filterDateBool = true;
 
 			// Handling date filtering
-			if (!start) {
+			if (start) {
 				if (!projStart) {
 					filterDateBool = false;
 				} else if (!projEnd) {
@@ -126,11 +126,11 @@
 			// console.log('proj', proj, projStart, projEnd, projTags);
 
 			// Handling date filtering
-			if (!start) {
+			if (start) {
 				if (!projStart) {
 					filterDateBool = false;
 				} else if (!projEnd) {
-					filterDateBool = start <= projStart && projStart <= end;
+					filterDateBool = projStart <= start && start <= projEnd;
 				} else if (projStart > end || projEnd < start) {
 					filterDateBool = false;
 				}
@@ -138,7 +138,7 @@
 
 			const bool =
 				filterDateBool && (projTags.some((tag) => tags.includes(tag)) || tags.length === 0);
-			console.log('bool', bool, projTags, tags);
+			// console.log('bool', bool, projTags, tags);
 			return bool;
 		});
 	});
@@ -281,7 +281,7 @@
 		{/key}
 	</section>
 	<h2 class="font-Anuphan text-3xl font-semibold">Money Allocation</h2>
-	<section class="flex flex-wrap justify-evenly">
+	<section class="grid grid-cols-3 gap-3">
 		{#key dashboard}
 			<RemainingAllocation {dashboard} />
 			<BudgetAllocation {dashboard} />
