@@ -7,6 +7,7 @@
 	import RemainingAllocation from '../../components/chart/remaining-allocation.svelte';
 	import DateFilter from '../../components/filter/date-filter.svelte';
 	import TagFilter from '../../components/filter/tag-filter.svelte';
+	import BackButton from '../../components/back-button.svelte';
 	import { filterDate, tagsList, filterGanttTag } from '../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
 	let auth = '';
@@ -239,16 +240,24 @@
 </script>
 
 <div class="flex flex-col gap-4 px-20">
-	<h1 class="font-Anuphan text-5xl font-semibold">Dashboard</h1>
-	<section class="flex flex-wrap gap-2">
-		<DateFilter />
-		<TagFilter />
+	<h1 class="font-Anuphan text-5xl font-semibold">Insight (Projects)</h1>
+	<!-- <section class="flex gap-2 bg-black"> -->
+	<section class="flex min-w-full flex-row">
+		<div class="flex justify-start gap-2">
+			<DateFilter />
+			<TagFilter />
+		</div>
+		<div class="flex w-full justify-end">
+			<BackButton />
+		</div>
 	</section>
+	<h2 class="font-Anuphan text-3xl font-semibold">Gantt Chart</h2>
 	<section class="h-[650px] overflow-y-auto rounded-md border bg-white">
 		{#key filteredGantt}
 			<GanttChart {ganttchartMap} />
 		{/key}
 	</section>
+	<h2 class="font-Anuphan text-3xl font-semibold">Money Allocation</h2>
 	<section class="flex flex-wrap justify-evenly">
 		{#key dashboard}
 			<RemainingAllocation {dashboard} />

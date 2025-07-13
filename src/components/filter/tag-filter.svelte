@@ -49,7 +49,7 @@
 	<Popover.Trigger>
 		<Button
 			on:click={() => isPopoverOpen.update((o) => !o)}
-			class="border-brown flex h-10 items-center gap-2 rounded-[6px] border  bg-white text-black hover:bg-white"
+			class="border-brown text-brown flex h-10 cursor-pointer items-center gap-2 rounded-[6px] border bg-white hover:bg-white"
 		>
 			<span
 				class="font-BaiJamjuree class:text-black
