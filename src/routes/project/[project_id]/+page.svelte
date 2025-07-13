@@ -67,39 +67,35 @@
 		};
 	}
 
+	$effect(() => {
+		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
+		const end = $filterDate.date.end?.toDate(getLocalTimeZone());
+		const tags = $filterGanttTag;
 
-$effect(() => {
-	const start = $filterDate.date.start?.toDate(getLocalTimeZone());
-	const end = $filterDate.date.end?.toDate(getLocalTimeZone());
-	const tags = $filterGanttTag;
-
-	if (!start && !end && tags.length === 0) {
-		filteredGantt = ganttchart;
-		return;
-	}
-
-	filteredGantt = ganttchart.filter((task) => {
-		const taskStart = new Date(task.start);
-		const taskEnd = new Date(task.end);
-		const taskTags = Array.isArray(task.tag) ? task.tag : [];
-		let filterDateBool = true;
-
-		if (start) {
-			if (!taskStart) {
-				filterDateBool = false;
-			} else if (!taskEnd) {
-				filterDateBool = start <= taskStart && taskStart <= end;
-			} else if (taskStart > end || taskEnd < start) {
-				filterDateBool = false;
-			}
+		if (!start && !end && tags.length === 0) {
+			filteredGantt = ganttchart;
+			return;
 		}
 
-		return (
-			filterDateBool &&
-			(taskTags.some((tag) => tags.includes(tag)) || tags.length === 0)
-		);
+		filteredGantt = ganttchart.filter((task) => {
+			const taskStart = new Date(task.start);
+			const taskEnd = new Date(task.end);
+			const taskTags = task.tag || [];
+			let filterDateBool = true;
+
+			if (start) {
+				if (!taskStart) {
+					filterDateBool = false;
+				} else if (!taskEnd) {
+					filterDateBool = start <= taskStart && taskStart <= end;
+				} else if (taskStart > end || taskEnd < start) {
+					filterDateBool = false;
+				}
+			}
+
+			return filterDateBool && (taskTags.some((tag) => tags.includes(tag)) || tags.length === 0);
+		});
 	});
-});
 
 	$effect(() => (ganttchartMap = transformData(filteredGantt)));
 
@@ -127,13 +123,19 @@ $effect(() => {
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
-		// set tagsList จาก tag ที่มีใน task จริง ๆ
-		const tags = Array.from(
-			new Set(
-				ganttchart.flatMap(task => Array.isArray(task.tag) ? task.tag : [])
-			)
-		);
-		tagsList.set(tags);
+		// fetch tags เหมือนหน้า /project
+		try {
+			   const response = await fetch(`${API_BASE_URL}/v2/tags/`, {
+				   headers: {
+					   Authorization: auth
+				   }
+			   });
+			   const json = await response.json();
+			   const temp = json.filter((tag) => !tag.isProject).map((tag) => tag.name);
+			   tagsList.set(temp);
+		} catch (error) {
+			console.log('Fetch error:', error);
+		}
 	});
 </script>
 
