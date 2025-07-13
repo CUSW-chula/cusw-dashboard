@@ -127,7 +127,7 @@
 				if (!projStart) {
 					filterDateBool = false;
 				} else if (!projEnd) {
-					filterDateBool = start <= projStart && projStart <= end;
+					filterDateBool = projStart <= start && start <= projEnd;
 				} else if (projStart > end || projEnd < start) {
 					filterDateBool = false;
 				}
