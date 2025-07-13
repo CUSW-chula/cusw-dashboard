@@ -34,10 +34,10 @@
 	);
 </script>
 
-<Card.Root class="flex min-h-[430px] max-w-[372px] flex-col">
-	<Card.Header class="flex min-h-[62px] flex-col items-center justify-start gap-1 text-center">
-		<Card.Title>การจัดสรรค่าใช้จ่าย</Card.Title>
-		<Card.Description class="text-black"
+<Card.Root class="flex min-h-[430px] w-full flex-col">
+	<Card.Header class="flex w-full min-h-[62px] flex-col items-center justify-start gap-1 text-center">
+		<Card.Title class="text-brown text-xl font-Anuphan">งบฯค่าใช้จ่ายจริงของโครงการ</Card.Title>
+		<Card.Description class="text-black font-Baijamjuree text-md"
 			>ค่าใช้จ่ายทั้งหมด <span class="text-red-500"
 				>{dashboard.sumExpense?.toLocaleString('th-TH', {
 					minimumFractionDigits: 2,
@@ -46,7 +46,7 @@
 			> บาท</Card.Description
 		>
 	</Card.Header>
-	<Card.Content class="w-[370px] flex-1">
+	<Card.Content class="w-full flex-1">
 		<Chart.Container config={chartConfig()} class="mx-auto aspect-square max-h-[250px]">
 			{#if dashboard?.tag_expense}
 				<PieChart
@@ -74,7 +74,7 @@
 			{/if}
 		</Chart.Container>
 	</Card.Content>
-	<Card.Footer class="flex max-w-[370px] flex-wrap items-start justify-center gap-2 text-sm">
+	<Card.Footer class="flex w-full flex-wrap items-start justify-center gap-2 text-sm">
 		{#each chartData() as item}
 			<legend class="flex items-center gap-1">
 				<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
