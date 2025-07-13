@@ -7,7 +7,7 @@
 	const tasks = ganttchartMap.projects;
 
 	const columns = [
-		{ id: 'text', header: 'Task name', flexgrow: 2 },
+		{ id: 'text', header: 'Title', flexgrow: 2 },
 		{
 			id: 'startF',
 			header: 'Start date',
