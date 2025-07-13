@@ -43,7 +43,7 @@
 			<Chart.Container config={chartConfig} class="mx-auto aspect-square max-h-[250px]">
 				<PieChart
 					data={[
-						{ type: 'budget', money: overallMoney.sumBudget, color: chartConfig.budget.color },
+						{ type: 'budget', money: overallMoney.sumBudget - overallMoney.sumExpense, color: chartConfig.budget.color },
 						{ type: 'expense', money: overallMoney.sumExpense, color: chartConfig.expense.color }
 					]}
 					key="type"
@@ -88,7 +88,7 @@
 				><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.budget
 					.label}
 				{(
-					(overallMoney.sumBudget / (overallMoney.sumBudget + overallMoney.sumExpense)) *
+					((overallMoney.sumBudget - overallMoney.sumExpense) / overallMoney.sumBudget) *
 					100
 				).toFixed(2)} %</legend
 			>
@@ -96,7 +96,7 @@
 				><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.expense
 					.label}
 				{(
-					(overallMoney.sumExpense / (overallMoney.sumBudget + overallMoney.sumExpense)) *
+					(overallMoney.sumExpense / overallMoney.sumBudget) *
 					100
 				).toFixed(2)} %</legend
 			>
