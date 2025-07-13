@@ -131,7 +131,7 @@
 				}
 			});
 			const json = await response.json();
-			const temp = json.filter((tag) => tag.isProject).map((tag) => tag.name);
+			const temp = json.filter((tag) => !tag.isProject).map((tag) => tag.name);
 			tagsList.set(temp);
 		} catch (error) {
 			console.log('Fetch error:', error);
