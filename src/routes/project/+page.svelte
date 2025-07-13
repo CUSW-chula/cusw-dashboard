@@ -150,6 +150,7 @@
 		return projects.reduce((arr, proj) => {
 			const tags = proj.tags?.map((t) => t.name) ?? ['other'];
 			tags.forEach((tag) => {
+				if (!tag.includes(filterTag)) return; // Skip if tag is not in filterTag
 				const index = arr.findIndex((item) => item.tag === tag);
 				if (index === -1) {
 					arr.push({ tag, [key]: proj[key] });
@@ -278,12 +279,12 @@
 		{/key}
 	</section>
 
-	<h2 class="font-Anuphan text-3xl font-semibold">Money Allocation by project</h2>
+	<!-- <h2 class="font-Anuphan text-3xl font-semibold">Money Allocation by project</h2>
 	<section class="flex flex-wrap justify-evenly">
 		{#key dashboard}
 			<RemainingAllocation_byProject {overallMoney} />
 			<BudgetAllocation_byProject {dashboard} />
 			<ExpensesAllocation_byProject {dashboard} />
 		{/key}
-	</section>
+	</section> -->
 </div>
