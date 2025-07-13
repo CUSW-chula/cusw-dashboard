@@ -80,7 +80,7 @@
 		filteredGantt = ganttchart.filter((task) => {
 			const taskStart = new Date(task.start);
 			const taskEnd = new Date(task.end);
-			const taskTags = task.tag || [];
+			const taskTags = task.tags || [];
 			let filterDateBool = true;
 
 			if (start) {
@@ -146,7 +146,7 @@
 		<TagFilter />
 	</section>
 	<section class="h-[650px] overflow-y-auto rounded-md border bg-white">
-		{#key ganttchartMap}
+		{#key filteredGantt}
 			<GanttChart {ganttchartMap} />
 		{/key}
 	</section>
