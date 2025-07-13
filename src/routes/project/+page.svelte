@@ -5,6 +5,9 @@
 	import BudgetAllocation from '../../components/chart/budget-allocation.svelte';
 	import ExpensesAllocation from '../../components/chart/expenses-allocation.svelte';
 	import RemainingAllocation from '../../components/chart/remaining-allocation.svelte';
+	import BudgetAllocation_byProject from '../../components/chart_byProject/budget-allocation.svelte';
+	import ExpensesAllocation_byProject from '../../components/chart_byProject/expenses-allocation.svelte';
+	import RemainingAllocation_byProject from '../../components/chart_byProject/remaining-allocation.svelte';
 	import DateFilter from '../../components/filter/date-filter.svelte';
 	import TagFilter from '../../components/filter/tag-filter.svelte';
 	import BackButton from '../../components/back-button.svelte';
@@ -104,6 +107,7 @@
 
 	let project = $state([]); // all projects fetched from the API
 	let dashboard = $state({}); //new dashboard object
+	let overallMoney = $state({}); // overall money object for remaining allocation chart
 
 	$effect(() => {
 		const start = $filterDate.date.start?.toDate(getLocalTimeZone());
@@ -139,53 +143,54 @@
 			return bool;
 		});
 	});
+	function calculateTagSummary(
+		projects,
+		key // 'budget' or 'expense'
+	) {
+		return projects.reduce((arr, proj) => {
+			const tags = proj.tags?.map((t) => t.name) ?? ['other'];
+			tags.forEach((tag) => {
+				const index = arr.findIndex((item) => item.tag === tag);
+				if (index === -1) {
+					arr.push({ tag, [key]: proj[key] });
+				} else {
+					arr[index][key] += proj[key];
+				}
+			});
+			return arr;
+		}, []);
+	}
 
 	$effect(() => {
-		if (filterProject.length === 0) {
-			dashboard = {};
-			return;
-		}
 		const sumBudget = filterProject.reduce((sum, proj) => sum + proj.budget, 0);
 		const sumExpense = filterProject.reduce((sum, proj) => sum + proj.expense, 0);
 
-		const tag_budget = filterProject.reduce((arr, proj) => {
-			const tags = proj.tags?.map((t) => t.name) ?? ['other'];
+		const tag_budget = calculateTagSummary(filterProject, 'budget');
+		const tag_expense = calculateTagSummary(filterProject, 'expense');
 
-			tags.forEach((tag) => {
-				const index = arr.findIndex((item) => item.tag === tag);
+		const projectList = filterProject.map((pj) => ({
+			projectName: pj.title,
+			budget: pj.budget,
+			budgetPercent: calPercentageMoney(pj.budget, sumBudget),
+			expense: pj.expense,
+			expensePercent: calPercentageMoney(pj.expense, sumExpense)
+		}));
 
-				if (index === -1) {
-					arr.push({ tag, budget: proj.budget });
-				} else {
-					arr[index].budget += proj.budget;
-				}
-			});
-
-			return arr;
-		}, []);
-
-		const tag_expense = filterProject.reduce((arr, proj) => {
-			const tags = proj.tags?.map((t) => t.name) ?? ['other'];
-
-			tags.forEach((tag) => {
-				const index = arr.findIndex((item) => item.tag === tag);
-
-				if (index === -1) {
-					arr.push({ tag, expense: proj.expense });
-				} else {
-					arr[index].expense += proj.expense;
-				}
-			});
-
-			return arr;
-		}, []);
-
-		Object.assign(dashboard, {
+		const result = {
 			sumBudget,
 			sumExpense,
 			tag_budget,
-			tag_expense
-		});
+			tag_expense,
+			projectList
+		};
+
+		if (filterTag.length === 0) {
+			Object.assign(overallMoney, result);
+			dashboard = {};
+		} else {
+			Object.assign(dashboard, result);
+			Object.assign(overallMoney, result);
+		}
 	});
 
 	onMount(async () => {
@@ -237,6 +242,13 @@
 			console.log('Fetch error:', error);
 		}
 	});
+
+	function calPercentageMoney(value, sum) {
+		if (sum === 0) return '0.00%';
+
+		const percentage = (value / sum) * 100;
+		return `${percentage.toFixed(2)}%`;
+	}
 </script>
 
 <div class="flex flex-col gap-4 px-20">
@@ -260,9 +272,18 @@
 	<h2 class="font-Anuphan text-3xl font-semibold">Money Allocation</h2>
 	<section class="grid grid-cols-3 gap-3">
 		{#key dashboard}
-			<RemainingAllocation {dashboard} />
+			<RemainingAllocation {overallMoney} />
 			<BudgetAllocation {dashboard} />
 			<ExpensesAllocation {dashboard} />
+		{/key}
+	</section>
+
+	<h2 class="font-Anuphan text-3xl font-semibold">Money Allocation by project</h2>
+	<section class="flex flex-wrap justify-evenly">
+		{#key dashboard}
+			<RemainingAllocation_byProject {overallMoney} />
+			<BudgetAllocation_byProject {dashboard} />
+			<ExpensesAllocation_byProject {dashboard} />
 		{/key}
 	</section>
 </div>

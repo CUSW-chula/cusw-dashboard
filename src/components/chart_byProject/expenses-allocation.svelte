@@ -11,12 +11,13 @@
 	function getColorByIndex(index: number): string {
 		return colorList[index % colorList.length];
 	}
+
 	const chartData = $derived(() =>
-		dashboard.tag_expense
-			? [...dashboard.tag_expense]
+		dashboard.projectList
+			? [...dashboard.projectList]
 					.sort((a, b) => b.expense - a.expense)
 					.map((project, index) => ({
-						tag: project.tag,
+						tag: project.projectName,
 						expense: project.expense,
 						color: getColorByIndex(index)
 					}))
@@ -25,21 +26,41 @@
 
 	const chartConfig = $derived(
 		() =>
-			dashboard.tag_expense?.reduce((acc, proj) => {
-				acc[proj.tag] = {
-					label: proj.tag
+			dashboard.projectList?.reduce((acc, project) => {
+				acc[project.projectName] = {
+					label: project.projectName
 				};
 				return acc;
 			}, {}) satisfies Chart.ChartConfig
 	);
+
+	// const chartData = $derived(() =>
+	// 	dashboard.tag_expense
+	// 		? [...dashboard.tag_expense]
+	// 				.sort((a, b) => b.expense - a.expense)
+	// 				.map((project, index) => ({
+	// 					tag: project.tag,
+	// 					expense: project.expense,
+	// 					color: getColorByIndex(index)
+	// 				}))
+	// 		: []
+	// );
+
+	// const chartConfig = $derived(
+	// 	() =>
+	// 		dashboard.tag_expense?.reduce((acc, proj) => {
+	// 			acc[proj.tag] = {
+	// 				label: proj.tag
+	// 			};
+	// 			return acc;
+	// 		}, {}) satisfies Chart.ChartConfig
+	// );
 </script>
 
-<Card.Root class="flex min-h-[430px] w-full flex-col">
-	<Card.Header
-		class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center"
-	>
-		<Card.Title class="text-brown font-Anuphan text-xl">งบฯค่าใช้จ่ายจริงของโครงการ</Card.Title>
-		<Card.Description class="font-Baijamjuree text-md text-black"
+<Card.Root class="flex min-h-[430px] max-w-[372px] flex-col">
+	<Card.Header class="flex min-h-[62px] flex-col items-center justify-start gap-1 text-center">
+		<Card.Title>การจัดสรรค่าใช้จ่าย</Card.Title>
+		<Card.Description class="text-black"
 			>ค่าใช้จ่ายทั้งหมด <span class="text-red-500"
 				>{dashboard.sumExpense?.toLocaleString('th-TH', {
 					minimumFractionDigits: 2,
@@ -48,9 +69,9 @@
 			> บาท</Card.Description
 		>
 	</Card.Header>
-	<Card.Content class="w-full flex-1">
+	<Card.Content class="w-[370px] flex-1">
 		<Chart.Container config={chartConfig()} class="mx-auto aspect-square max-h-[250px]">
-			{#if dashboard?.tag_expense}
+			{#if dashboard?.tag_expense?.length > 0}
 				<PieChart
 					data={chartData()}
 					key="tag"
@@ -76,13 +97,13 @@
 			{/if}
 		</Chart.Container>
 	</Card.Content>
-	<Card.Footer class="flex w-full flex-wrap items-start justify-center gap-2 text-sm">
-		{#each chartData().filter((item) => item.expense > 0) as item}
-				<legend class="flex items-center gap-1">
-					<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
-					{item.tag}
-					{((item.expense / dashboard.sumExpense) * 100).toFixed(2)} %
-				</legend>
+	<Card.Footer class="flex max-w-[370px] flex-wrap items-start justify-center gap-2 text-sm">
+		{#each chartData() as item}
+			<legend class="flex items-center gap-1">
+				<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
+				{item.tag}
+				{((item.expense / dashboard.sumExpense) * 100).toFixed(2)} %
+			</legend>
 		{/each}
 	</Card.Footer>
 </Card.Root>

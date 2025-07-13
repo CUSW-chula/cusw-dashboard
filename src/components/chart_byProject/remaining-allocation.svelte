@@ -9,20 +9,17 @@
 
 	const chartData = [{ expense: overallMoney.sumExpense, budget: overallMoney.sumBudget }];
 	const chartConfig = {
-		budget: { label: 'เงินคงเหลือ', color: '#489CFF' },
+		budget: { label: 'งบประมาณ', color: '#489CFF' },
 		expense: { label: 'ค่าใช้จ่าย', color: '#EF4444' }
 	} satisfies Chart.ChartConfig;
 </script>
 
-<Card.Root class="flex min-h-[430px] w-full flex-col">
-	<Card.Header
-		class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center"
-	>
-		<Card.Title class="text-brown font-Anuphan text-xl">ภาพรวมของงบฯโครงการ</Card.Title>
-		<Card.Description
-			class="font-Baijamjuree text-md flex flex-wrap items-center justify-center gap-1 text-center text-black"
+<Card.Root class="flex min-h-[430px] min-w-[370px] flex-col">
+	<Card.Header class="flex min-h-[62px] flex-col items-center justify-start gap-1 text-center">
+		<Card.Title>การจัดสรรงบคงเหลือ</Card.Title>
+		<Card.Description class="flex flex-wrap items-center justify-center text-center text-black "
 			><p>
-				เงินคงเหลือ {overallMoney.sumBudget?.toLocaleString('th-TH', {
+				งบประมาณ {overallMoney.sumBudget?.toLocaleString('th-TH', {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2
 				}) ?? '0'} บาท
@@ -39,12 +36,12 @@
 		>
 	</Card.Header>
 	{#if overallMoney?.tag_budget}
-		<Card.Content class="w-full flex-1 justify-center">
+		<Card.Content class="w-[370px] flex-1 justify-center">
 			<Chart.Container config={chartConfig} class="mx-auto aspect-square max-h-[250px]">
 				<PieChart
 					data={[
-						{ type: 'budget', money: overallMoney.sumBudget, color: chartConfig.budget.color },
-						{ type: 'expense', money: overallMoney.sumExpense, color: chartConfig.expense.color }
+						{ type: 'expense', money: overallMoney.sumExpense, color: chartConfig.expense.color },
+						{ type: 'budget', money: overallMoney.sumBudget, color: chartConfig.budget.color }
 					]}
 					key="type"
 					value="money"
@@ -83,9 +80,9 @@
 				</PieChart>
 			</Chart.Container>
 		</Card.Content>
-		<Card.Footer class="flex h-full w-full items-start justify-center gap-2 text-sm ">
+		<Card.Footer class="flex h-full items-start justify-center gap-2 text-sm ">
 			<legend class="flex items-center gap-1"
-				><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.budget
+				><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.budget
 					.label}
 				{(
 					(overallMoney.sumBudget / (overallMoney.sumBudget + overallMoney.sumExpense)) *
@@ -93,7 +90,7 @@
 				).toFixed(2)} %</legend
 			>
 			<legend class="flex items-center gap-1"
-				><Circle class="h-[14px] w-[14px] text-[#EF4444]" fill="#EF4444" />{chartConfig.expense
+				><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.expense
 					.label}
 				{(
 					(overallMoney.sumExpense / (overallMoney.sumBudget + overallMoney.sumExpense)) *

@@ -6,16 +6,15 @@
 
 	let { dashboard } = $props();
 	const colorList = ['#69BCA0', '#489CFF', '#F4BE38', '#F79939', '#D36FFF', '#FF6B6B'];
-
 	function getColorByIndex(index: number): string {
 		return colorList[index % colorList.length];
 	}
 	const chartData = $derived(() =>
-		dashboard.tag_budget
-			? [...dashboard.tag_budget]
+		dashboard.projectList
+			? [...dashboard.projectList]
 					.sort((a, b) => b.budget - a.budget)
 					.map((project, index) => ({
-						tag: project.tag,
+						tag: project.projectName,
 						budget: project.budget,
 						color: getColorByIndex(index)
 					}))
@@ -24,30 +23,50 @@
 
 	const chartConfig = $derived(
 		() =>
-			dashboard.tag_budget?.reduce((acc, proj) => {
-				acc[proj.tag] = {
-					label: proj.tag
+			dashboard.projectList?.reduce((acc, project) => {
+				acc[project.projectName] = {
+					label: project.projectName
 				};
 				return acc;
 			}, {}) satisfies Chart.ChartConfig
 	);
+
+	// const chartData = $derived(() =>
+	// 	dashboard.tag_budget
+	// 		? [...dashboard.tag_budget]
+	// 				.sort((a, b) => b.budget - a.budget)
+	// 				.map((project, index) => ({
+	// 					tag: project.tag,
+	// 					budget: project.budget,
+	// 					color: getColorByIndex(index)
+	// 				}))
+	// 		: []
+	// );
+
+	// const chartConfig = $derived(
+	// 	() =>
+	// 		dashboard.tag_budget?.reduce((acc, proj) => {
+	// 			acc[proj.tag] = {
+	// 				label: proj.tag
+	// 			};
+	// 			return acc;
+	// 		}, {}) satisfies Chart.ChartConfig
+	// );
 </script>
 
-<Card.Root class="flex min-h-[430px] w-full flex-col">
-	<Card.Header
-		class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center"
-	>
-		<Card.Title class="text-brown font-Anuphan text-xl">ภาพรวมของงบฯที่ได้รับการอนุมัติ</Card.Title>
-		<Card.Description class="font-Baijamjuree text-md text-black"
+<Card.Root class="flex min-h-[430px] max-w-[372px] flex-col">
+	<Card.Header class="flex min-h-[62px] flex-col items-center justify-start gap-1 text-center">
+		<Card.Title>การจัดสรรงบประมาณ</Card.Title>
+		<Card.Description class="text-black"
 			>งบประมาณทั้งหมด {dashboard.sumBudget?.toLocaleString('th-TH', {
 				minimumFractionDigits: 2,
 				maximumFractionDigits: 2
 			}) ?? '0'} บาท</Card.Description
 		>
 	</Card.Header>
-	<Card.Content class="w-full flex-1">
+	<Card.Content class="w-[370px] flex-1">
 		<Chart.Container config={chartConfig()} class="mx-auto aspect-square max-h-[250px]">
-			{#if dashboard?.tag_budget}
+			{#if dashboard?.tag_budget?.length > 0}
 				<PieChart
 					data={chartData()}
 					key="tag"
@@ -73,15 +92,13 @@
 			{/if}
 		</Chart.Container>
 	</Card.Content>
-	<Card.Footer class="flex w-full flex-wrap items-start justify-center gap-2 text-sm">
+	<Card.Footer class="flex max-w-[370px] flex-wrap items-start justify-center gap-2 text-sm">
 		{#each chartData() as item}
-			{#if item.budget > 0}
-				<legend class="flex items-center gap-1">
-					<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
-					{item.tag}
-					{((item.budget / dashboard.sumBudget) * 100).toFixed(2)} %
-				</legend>
-			{/if}
+			<legend class="flex items-center gap-1">
+				<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
+				{item.tag}
+				{((item.budget / dashboard.sumBudget) * 100).toFixed(2)} %
+			</legend>
 		{/each}
 	</Card.Footer>
 </Card.Root>
