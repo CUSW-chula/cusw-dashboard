@@ -88,7 +88,7 @@
 				><Circle class="h-[14px] w-[14px] text-[#489CFF]" fill="#489CFF" />{chartConfig.budget
 					.label}
 				{(
-					(overallMoney.sumBudget / (overallMoney.sumBudget + overallMoney.sumExpense)) *
+					((overallMoney.sumBudget - overallMoney.sumExpense) / (overallMoney.sumBudget + overallMoney.sumExpense)) *
 					100
 				).toFixed(2)} %</legend
 			>
