@@ -53,7 +53,7 @@
 			class={cn(
 				buttonVariants({ variant: 'outline' }),
 				value && value.start ? 'font-bold' : 'font-normal',
-				'border-brown text-brown h-[40px] w-[240px] justify-start rounded-[6px]'
+				'border-brown text-brown h-[40px] w-[240px] cursor-pointer justify-start rounded-[6px]'
 			)}
 		>
 			<CalendarIcon class="size-4 font-normal" />
@@ -78,13 +78,17 @@
 					startValue = v;
 				}}
 				numberOfMonths={2}
+				className="cursor-pointer"
 			/>
 			<div class="flex justify-end gap-2 pr-2 pb-2">
 				<button
 					onclick={resetDate}
-					class="border-brown text-brown h-[32px] rounded-[6px] border px-2 text-sm">Reset</button
+					class="border-brown text-brown h-[32px] cursor-pointer rounded-[6px] border px-2 text-sm hover:bg-gray-50"
+					>Reset</button
 				>
-				<button onclick={applyDate} class="bg-brown h-[32px] rounded-[6px] px-2 text-sm text-white"
+				<button
+					onclick={applyDate}
+					class="bg-brown h-[32px] cursor-pointer rounded-[6px] px-2 text-sm text-white hover:bg-black"
 					>Apply</button
 				>
 			</div>
