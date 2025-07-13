@@ -150,7 +150,7 @@
 		return projects.reduce((arr, proj) => {
 			const tags = proj.tags?.map((t) => t.name) ?? ['other'];
 			tags.forEach((tag) => {
-				if (!tag.includes(filterTag)) return; // Skip if tag is not in filterTag
+				if (!filterTag.includes(tag)) return;
 				const index = arr.findIndex((item) => item.tag === tag);
 				if (index === -1) {
 					arr.push({ tag, [key]: proj[key] });
