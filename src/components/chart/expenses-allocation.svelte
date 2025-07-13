@@ -75,14 +75,12 @@
 		</Chart.Container>
 	</Card.Content>
 	<Card.Footer class="flex w-full flex-wrap items-start justify-center gap-2 text-sm">
-		{#each chartData() as item}
-			{#if item.expense > 0}
+		{#each chartData().filter((item) => item.expense > 0) as item}
 				<legend class="flex items-center gap-1">
 					<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
 					{item.tag}
 					{((item.expense / dashboard.sumExpense) * 100).toFixed(2)} %
 				</legend>
-			{/if}
 		{/each}
 	</Card.Footer>
 </Card.Root>
