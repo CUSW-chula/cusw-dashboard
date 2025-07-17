@@ -80,13 +80,13 @@
 					>
 						<div
 							class="border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border
-              opacity-50 [&_svg]:invisible"
-							class:bg-primary={$selectedValues.length === $tagsList.length}
-							class:text-primary-foreground={$selectedValues.length === $tagsList.length}
+              "
 							class:opacity-50={$selectedValues.length !== $tagsList.length}
+							class:[&_svg]:invisible={$selectedValues.length !== $tagsList.length}
+							class:text-primary-foreground={$selectedValues.length === $tagsList.length}
 							class:[&_svg\\:visible]={$selectedValues.length === $tagsList.length}
 						>
-							<Check class="h-4 w-4" />
+							<Check class="text-black" />
 						</div>
 
 						<span>(Select All)</span>
@@ -102,13 +102,13 @@
 						>
 							<div
 								class="border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border
-                opacity-50 [&_svg]:invisible"
-								class:bg-primary={$selectedValues.includes(tag)}
+                "
+								class:[&_svg]:invisible={!$selectedValues.includes(tag)}
 								class:text-primary-foreground={$selectedValues.includes(tag)}
 								class:opacity-50={!$selectedValues.includes(tag)}
 								class:[&_svg\\:visible]={$selectedValues.includes(tag)}
 							>
-								<Check class="h-4 w-4" />
+								<Check class="text-black" />
 							</div>
 
 							<span>{tag}</span>

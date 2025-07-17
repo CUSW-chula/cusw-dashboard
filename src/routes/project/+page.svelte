@@ -13,12 +13,14 @@
 	import BackButton from '../../components/back-button.svelte';
 	import { filterDate, tagsList, filterGanttTag } from '../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
+
 	let auth = '';
 	const cookieString = document.cookie;
 	const match = cookieString.match(/auth=([^;]+)/);
 	if (match) {
 		auth = decodeURIComponent(match[1]);
 	}
+
 	let ganttchart = $state([]);
 	let ganttchartMap = $state([]);
 	let filterProject = $state([]); // projects filtered by date
@@ -45,18 +47,18 @@
 			const end = new Date(item.end);
 			if (isNaN(start) || isNaN(end)) continue;
 
-			const endPlus = new Date(end);
-			endPlus.setDate(end.getDate() + 1);
+			const newEnd = new Date(end);
+			newEnd.setDate(end.getDate() + 1);
 
 			// Update min/max
 			if (!minStart || start < minStart) minStart = start;
-			if (!maxEnd || endPlus > maxEnd) maxEnd = endPlus;
+			if (!maxEnd || newEnd > maxEnd) maxEnd = newEnd;
 
 			projects.push({
 				...item,
-				startF: formatter.format(start),
-				endF: formatter.format(end),
-				end: endPlus.toISOString()
+				newStart: formatter.format(start),
+				newEnd: formatter.format(end),
+				end: newEnd.toISOString()
 			});
 		}
 
@@ -104,7 +106,6 @@
 	});
 
 	$effect(() => (ganttchartMap = transformData(filteredGantt)));
-
 	let project = $state([]); // all projects fetched from the API
 	let dashboard = $state({}); //new dashboard object
 	let overallMoney = $state({}); // overall money object for remaining allocation chart
@@ -124,7 +125,6 @@
 			const projEnd = new Date(proj.endDate);
 			const projTags = proj.tags.map((t) => t.name);
 			let filterDateBool = true;
-			// console.log('proj', proj, projStart, projEnd, projTags);
 
 			// Handling date filtering
 			if (start) {
@@ -139,10 +139,10 @@
 
 			const bool =
 				filterDateBool && (projTags.some((tag) => tags.includes(tag)) || tags.length === 0);
-			// console.log('bool', bool, projTags, tags);
 			return bool;
 		});
 	});
+
 	function calculateTagSummary(
 		projects,
 		key // 'budget' or 'expense'
@@ -219,7 +219,6 @@
 
 			const json = await response.json();
 			project = [...json];
-			console.log('project', project);
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
@@ -278,13 +277,4 @@
 			<ExpensesAllocation {dashboard} />
 		{/key}
 	</section>
-
-	<!-- <h2 class="font-Anuphan text-3xl font-semibold">Money Allocation by project</h2>
-	<section class="flex flex-wrap justify-evenly">
-		{#key dashboard}
-			<RemainingAllocation_byProject {overallMoney} />
-			<BudgetAllocation_byProject {dashboard} />
-			<ExpensesAllocation_byProject {dashboard} />
-		{/key}
-	</section> -->
 </div>

@@ -1,6 +1,5 @@
 <script>
-	import { Gantt } from 'wx-svelte-gantt';
-	import { Willow } from 'wx-svelte-gantt';
+	import { Gantt, Willow } from 'wx-svelte-gantt';
 
 	let { ganttchartMap } = $props();
 
@@ -9,19 +8,18 @@
 	const columns = [
 		{ id: 'text', header: 'Title', flexgrow: 2 },
 		{
-			id: 'startF',
+			id: 'newStart',
 			header: 'Start date',
 			flexgrow: 1,
 			align: 'center'
 		},
 		{
-			id: 'endF',
+			id: 'newEnd',
 			header: 'End date',
 			align: 'center',
 			flexgrow: 1
 		}
 	];
-	const links = [{ id: 1, source: 20, target: 21, type: 'e2e' }];
 
 	let readonly = true;
 	let lengthUnit = 'month';
@@ -34,8 +32,8 @@
 		level: 2,
 		levels: [
 			{
-				minCellWidth: 150,
-				maxCellWidth: 250,
+				minCellWidth: 80,
+				maxCellWidth: 80,
 				scales: [
 					{ unit: 'year', step: 1, format: 'yyyy' },
 					{ unit: 'month', step: 1, format: 'MMMM' }
@@ -58,7 +56,6 @@
 	<Gantt
 		{columns}
 		{tasks}
-		{links}
 		zoom={zoomConfig}
 		{readonly}
 		scales={complexScales}

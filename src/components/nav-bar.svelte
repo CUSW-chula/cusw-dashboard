@@ -27,7 +27,6 @@
 			auth = decodeURIComponent(match[1]);
 			try {
 				const decoded = jwtDecode<{ id: string }>(auth);
-				console.log('Decoded JWT:', decoded); // Debug: show decoded token
 				if (decoded && decoded.id) {
 					userid = decoded.id;
 				}
@@ -35,12 +34,10 @@
 				console.error('Invalid token:', error);
 			}
 		}
-		console.log('userid before fetchProfile:', userid); // Debug: show userid
 		if (userid) fetchProfile();
 	});
 
 	async function fetchProfile() {
-		console.log('Calling fetchProfile with userid:', userid); // Debug: show fetchProfile call
 		try {
 			const response = await fetch(`${API_BASE_URL}/v2/users/${userid}`, {
 				headers: {
@@ -53,7 +50,6 @@
 				return;
 			}
 			const data = await response.json();
-			console.log('Fetched profile data:', data); // Debug: show fetched data
 			profile = { ...profile, ...data };
 		} catch (error) {
 			console.error('Error fetching Owner:', error);

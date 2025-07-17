@@ -38,7 +38,7 @@
 	<Card.Header
 		class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center"
 	>
-		<Card.Title class="text-brown font-Anuphan text-xl">งบฯค่าใช้จ่ายจริงของโครงการ</Card.Title>
+		<Card.Title class="text-brown font-Anuphan text-xl">งบฯ ค่าใช้จ่ายจริงของโครงการ</Card.Title>
 		<Card.Description class="font-Baijamjuree text-md text-black"
 			>ค่าใช้จ่ายทั้งหมด <span class="text-red-500"
 				>{dashboard.sumExpense?.toLocaleString('th-TH', {
@@ -48,7 +48,7 @@
 			> บาท</Card.Description
 		>
 	</Card.Header>
-	<Card.Content class="w-full flex-1">
+	<Card.Content class="w-full">
 		<Chart.Container config={chartConfig()} class="mx-auto aspect-square max-h-[250px]">
 			{#if dashboard?.tag_expense}
 				<PieChart
@@ -78,11 +78,11 @@
 	</Card.Content>
 	<Card.Footer class="flex w-full flex-wrap items-start justify-center gap-2 text-sm">
 		{#each chartData().filter((item) => item.expense > 0) as item}
-				<legend class="flex items-center gap-1">
-					<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
-					{item.tag}
-					{((item.expense / dashboard.sumExpense) * 100).toFixed(2)} %
-				</legend>
+			<legend class="flex items-center gap-1">
+				<Circle class="h-[14px] w-[14px]" fill={item.color} style="color: {item.color}" />
+				{item.tag}
+				{((item.expense / dashboard.sumExpense) * 100).toFixed(2)} %
+			</legend>
 		{/each}
 	</Card.Footer>
 </Card.Root>
