@@ -44,18 +44,18 @@
 			const end = new Date(item.end);
 			if (isNaN(start) || isNaN(end)) continue;
 
-			const endPlus = new Date(end);
-			endPlus.setDate(end.getDate() + 1);
+			const newEnd = new Date(end);
+			newEnd.setDate(end.getDate() + 1);
 
 			// Update min/max
 			if (!minStart || start < minStart) minStart = start;
-			if (!maxEnd || endPlus > maxEnd) maxEnd = endPlus;
+			if (!maxEnd || newEnd > maxEnd) maxEnd = newEnd;
 
 			projects.push({
 				...item,
-				startF: formatter.format(start),
-				endF: formatter.format(end),
-				end: endPlus.toISOString(),
+				newStart: formatter.format(start),
+				newEnd: formatter.format(end),
+				end: newEnd.toISOString(),
 				parent: item.parentId
 			});
 		}
@@ -125,14 +125,14 @@
 		}
 		// fetch tags เหมือนหน้า /project
 		try {
-			   const response = await fetch(`${API_BASE_URL}/v2/tags/`, {
-				   headers: {
-					   Authorization: auth
-				   }
-			   });
-			   const json = await response.json();
-			   const temp = json.filter((tag) => !tag.isProject).map((tag) => tag.name);
-			   tagsList.set(temp);
+			const response = await fetch(`${API_BASE_URL}/v2/tags/`, {
+				headers: {
+					Authorization: auth
+				}
+			});
+			const json = await response.json();
+			const temp = json.filter((tag) => !tag.isProject).map((tag) => tag.name);
+			tagsList.set(temp);
 		} catch (error) {
 			console.log('Fetch error:', error);
 		}
