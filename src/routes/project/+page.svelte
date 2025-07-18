@@ -252,7 +252,7 @@
 </script>
 
 <div class="flex flex-col gap-4 px-20">
-	<h1 class="font-Anuphan text-5xl font-semibold">Insight (Projects)</h1>
+	<h1 class="font-Anuphan text-5xl font-semibold">Project Data Overview</h1>
 	<!-- <section class="flex gap-2 bg-black"> -->
 	<section class="flex min-w-full flex-row">
 		<div class="flex justify-start gap-2">
