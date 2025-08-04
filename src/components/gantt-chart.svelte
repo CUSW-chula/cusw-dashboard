@@ -18,6 +18,12 @@
 			header: 'End date',
 			align: 'center',
 			flexgrow: 1
+		},
+		{
+			id: 'progress',
+			header: 'Progress',
+			align: 'center',
+			flexgrow: 1
 		}
 	];
 
