@@ -46,7 +46,7 @@
 
 			const newEnd = new Date(end);
 			newEnd.setDate(end.getDate() + 1);
-
+			const progress = item.progress+' %'
 			// Update min/max
 			if (!minStart || start < minStart) minStart = start;
 			if (!maxEnd || newEnd > maxEnd) maxEnd = newEnd;
@@ -56,7 +56,8 @@
 				newStart: formatter.format(start),
 				newEnd: formatter.format(end),
 				end: newEnd.toISOString(),
-				parent: item.parentId
+				parent: item.parentId,
+				progress: progress
 			});
 		}
 
