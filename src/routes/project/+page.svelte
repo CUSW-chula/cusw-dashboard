@@ -42,11 +42,10 @@
 
 		for (const item of data) {
 			if (!item.start || !item.end) continue;
-
 			const start = new Date(item.start);
 			const end = new Date(item.end);
 			if (isNaN(start) || isNaN(end)) continue;
-
+			const progress = item.progress+' %'
 			const newEnd = new Date(end);
 			newEnd.setDate(end.getDate() + 1);
 
@@ -58,7 +57,8 @@
 				...item,
 				newStart: formatter.format(start),
 				newEnd: formatter.format(end),
-				end: newEnd.toISOString()
+				end: newEnd.toISOString(),
+				progress: progress
 			});
 		}
 
