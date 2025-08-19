@@ -80,7 +80,7 @@
 							class="flex h-full w-full cursor-pointer items-center"
 						>
 							<div
-								class="border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border !bg-white
+								class="border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border opacity-50
                 "
 								class:[&_svg]:invisible={!$selectedValues.includes(tag)}
 								class:text-primary-foreground={$selectedValues.includes(tag)}
