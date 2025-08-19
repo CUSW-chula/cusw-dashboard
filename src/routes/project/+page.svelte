@@ -45,7 +45,7 @@
 			const start = new Date(item.start);
 			const end = new Date(item.end);
 			if (isNaN(start) || isNaN(end)) continue;
-			const progress = item.progress+' %'
+			const progress = item.progress + ' %';
 			const newEnd = new Date(end);
 			newEnd.setDate(end.getDate() + 1);
 

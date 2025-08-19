@@ -37,7 +37,8 @@
 	<Card.Header
 		class="flex min-h-[62px] w-full flex-col items-center justify-start gap-1 text-center"
 	>
-		<Card.Title class="text-brown font-Anuphan text-xl">ภาพรวมของงบฯ ที่ได้รับการอนุมัติ</Card.Title>
+		<Card.Title class="text-brown font-Anuphan text-xl">ภาพรวมของงบฯ ที่ได้รับการอนุมัติ</Card.Title
+		>
 		<Card.Description class="font-Baijamjuree text-md text-black"
 			>งบประมาณทั้งหมด {dashboard.sumBudget?.toLocaleString('th-TH', {
 				minimumFractionDigits: 2,

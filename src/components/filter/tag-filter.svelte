@@ -72,27 +72,6 @@
 			<Command.List>
 				<Command.Empty>No results found.</Command.Empty>
 
-				<!-- Select‑all row -->
-				<Command.Item>
-					<button
-						on:click={() => toggleAll()}
-						class="flex h-full w-full cursor-pointer items-center"
-					>
-						<div
-							class="border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border
-              "
-							class:opacity-50={$selectedValues.length !== $tagsList.length}
-							class:[&_svg]:invisible={$selectedValues.length !== $tagsList.length}
-							class:text-primary-foreground={$selectedValues.length === $tagsList.length}
-							class:[&_svg\\:visible]={$selectedValues.length === $tagsList.length}
-						>
-							<Check class="text-black" />
-						</div>
-
-						<span>(Select All)</span>
-					</button>
-				</Command.Item>
-
 				<!-- tag rows -->
 				{#each $tagsList as tag}
 					<Command.Item
@@ -101,7 +80,7 @@
 							class="flex h-full w-full cursor-pointer items-center"
 						>
 							<div
-								class="border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border
+								class="border-primary mr-2 flex h-4 w-4 items-center justify-center rounded-sm border !bg-white
                 "
 								class:[&_svg]:invisible={!$selectedValues.includes(tag)}
 								class:text-primary-foreground={$selectedValues.includes(tag)}
@@ -119,7 +98,7 @@
 				<Command.Separator />
 
 				<!-- footer -->
-				<div class="flex justify-between">
+				<div class="absolute bottom-0 flex w-full justify-between">
 					{#if $selectedValues.length}
 						<button
 							on:click={handleClear}
