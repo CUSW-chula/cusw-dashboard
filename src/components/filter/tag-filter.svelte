@@ -64,17 +64,17 @@
 	<Popover.Content class="p-0">
 		<Command.Root>
 			<Command.Input
-				placeholder="Type a tag..."
+				placeholder="Search..."
 				bind:value={inputValue}
 				on:keydown={handleInputKeyDown}
 			/>
 
-			<Command.List>
+			<Command.List class="mb-10">
 				<Command.Empty>No results found.</Command.Empty>
 
 				<!-- tag rows -->
 				{#each $tagsList as tag}
-					<Command.Item
+					<Command.Item class="mb-10"
 						><button
 							on:click={() => toggleOption(tag)}
 							class="flex h-full w-full cursor-pointer items-center"
@@ -89,7 +89,6 @@
 							>
 								<Check class="text-black" />
 							</div>
-
 							<span>{tag}</span>
 						</button>
 					</Command.Item>
@@ -98,7 +97,7 @@
 				<Command.Separator />
 
 				<!-- footer -->
-				<div class="absolute bottom-0 flex w-full justify-between">
+				<div class="absolute bottom-0 flex w-full justify-between bg-white px-2 py-1.5">
 					{#if $selectedValues.length}
 						<button
 							on:click={handleClear}
