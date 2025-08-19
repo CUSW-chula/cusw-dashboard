@@ -74,7 +74,7 @@
 
 				<!-- tag rows -->
 				{#each $tagsList as tag}
-					<Command.Item class="mb-10"
+					<Command.Item
 						><button
 							on:click={() => toggleOption(tag)}
 							class="flex h-full w-full cursor-pointer items-center"
