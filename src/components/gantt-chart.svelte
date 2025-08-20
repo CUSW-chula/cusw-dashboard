@@ -8,13 +8,13 @@
 	const columns = [
 		{ id: 'text', header: 'Title', flexgrow: 2 },
 		{
-			id: 'newStart',
+			id: 'display_start',
 			header: 'Start date',
 			flexgrow: 1,
 			align: 'center'
 		},
 		{
-			id: 'newEnd',
+			id: 'display_end',
 			header: 'End date',
 			align: 'center',
 			flexgrow: 1
@@ -66,6 +66,6 @@
 		{readonly}
 		scales={complexScales}
 		{lengthUnit}
-		start={ganttchartMap.fDate}
+		start={ganttchartMap.first_display_date}
 	/>
 </Willow>

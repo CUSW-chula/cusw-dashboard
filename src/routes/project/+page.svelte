@@ -13,7 +13,7 @@
 	import BackButton from '../../components/back-button.svelte';
 	import { filterDate, tagsList, filterGanttTag } from '../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
-
+	import { format } from 'date-fns';
 	let auth = '';
 	const cookieString = document.cookie;
 	const match = cookieString.match(/auth=([^;]+)/);
@@ -28,44 +28,36 @@
 	let filterTag = $state([]); // tags filtered
 
 	function transformData(data) {
-		const formatter = new Intl.DateTimeFormat('en-GB', {
-			day: '2-digit',
-			month: '2-digit',
-			year: 'numeric'
-		});
 		const isoFormatter = (date) => date.toISOString().split('T')[0];
-
 		let minStart = null;
 		let maxEnd = null;
-
 		const projects = [];
 
 		for (const item of data) {
 			if (!item.start || !item.end) continue;
 			const start = new Date(item.start);
 			const end = new Date(item.end);
-			if (isNaN(start) || isNaN(end)) continue;
-			const progress = item.progress + ' %';
-			const newEnd = new Date(end);
-			newEnd.setDate(end.getDate() + 1);
+			if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) continue;
 
-			// Update min/max
+			const adjustedEnd = new Date(end);
+			adjustedEnd.setDate(adjustedEnd.getDate() + 1);
+
 			if (!minStart || start < minStart) minStart = start;
-			if (!maxEnd || newEnd > maxEnd) maxEnd = newEnd;
+			if (!maxEnd || adjustedEnd > maxEnd) maxEnd = adjustedEnd;
 
 			projects.push({
 				...item,
-				newStart: formatter.format(start),
-				newEnd: formatter.format(end),
-				end: newEnd.toISOString(),
-				progress: progress
+				display_start: format(start, 'dd/MM/yyyy'),
+				display_end: format(end, 'dd/MM/yyyy'),
+				end: adjustedEnd.toISOString(),
+				progress: `${item.progress} %`
 			});
 		}
 
 		return {
 			projects,
-			fDate: minStart ? isoFormatter(minStart) : null,
-			lDate: maxEnd ? isoFormatter(maxEnd) : null
+			first_display_date: minStart ? isoFormatter(minStart) : null,
+			last_display_date: maxEnd ? isoFormatter(maxEnd) : null
 		};
 	}
 
