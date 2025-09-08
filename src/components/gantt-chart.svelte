@@ -8,7 +8,7 @@
 	const columns = [
 		{ id: 'text', header: 'Title', flexgrow: 2 },
 		{
-			id: 'display_start',
+			id: 'start',
 			header: 'Start date',
 			flexgrow: 1,
 			align: 'center'
