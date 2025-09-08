@@ -47,8 +47,8 @@
 
 			projects.push({
 				...item,
-				display_start: format(start, 'dd/MM/yyyy'),
-				display_end: format(end, 'dd/MM/yyyy'),
+				display_start: start,
+				display_end: end,
 				end: adjustedEnd.toISOString(),
 				progress: `${item.progress} %`
 			});
