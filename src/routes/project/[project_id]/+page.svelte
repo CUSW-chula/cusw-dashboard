@@ -38,7 +38,7 @@
 			if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) continue;
 
 			const adjustedEnd = new Date(end);
-			adjustedEnd.setDate(adjustedEnd.getDate() + 1);
+			adjustedEnd.setHours(23, 59, 59, 999);
 
 			if (!minStart || start < minStart) minStart = start;
 			if (!maxEnd || adjustedEnd > maxEnd) maxEnd = adjustedEnd;
