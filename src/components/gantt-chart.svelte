@@ -14,13 +14,13 @@
 			align: 'center'
 		},
 		{
-			id: 'display_end',
+			id: 'end',
 			header: 'End date',
 			align: 'center',
 			flexgrow: 1
 		},
 		{
-			id: 'progress',
+			id: 'progress_string',
 			header: 'Progress',
 			align: 'center',
 			flexgrow: 1

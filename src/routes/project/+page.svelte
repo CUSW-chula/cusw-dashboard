@@ -50,7 +50,8 @@
 				display_start: start,
 				display_end: end,
 				end: adjustedEnd.toISOString(),
-				progress: `${item.progress} %`
+				progress_string: `${item.progress} %`,
+				progress: item.progress
 			});
 		}
 

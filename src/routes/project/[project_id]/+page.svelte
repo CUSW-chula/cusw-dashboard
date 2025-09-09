@@ -49,7 +49,8 @@
 				display_end: end,
 				end: adjustedEnd.toISOString(),
 				parent: item.parentId,
-				progress: `${item.progress} %`
+				progress_string: `${item.progress} %`,
+				progress: item.progress
 			});
 		}
 
