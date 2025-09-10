@@ -24,6 +24,8 @@
 	});
 
 	let startValue: DateValue | undefined = $state(undefined);
+	let isOpen = $state(false);
+	let refDate: DateRange = $state({ start: undefined, end: undefined });
 
 	function resetDate() {
 		filterDate.set({
@@ -36,6 +38,7 @@
 			start: undefined,
 			end: undefined
 		};
+		isOpen = false; // Close popover after reset
 	}
 	function applyDate() {
 		filterDate.set({
@@ -44,11 +47,18 @@
 				end: value.end
 			}
 		});
+		refDate = { ...value };
+		isOpen = false; // Close popover after applying
+	}
+	function closePopover(isOpen: boolean) {		
+		if (isOpen) return;
+		isOpen = false;
+		value = { ...refDate };
 	}
 </script>
 
 <div class="grid gap-2">
-	<Popover.Root>
+	<Popover.Root bind:open={isOpen} onOpenChange={(open) => closePopover(open)}>
 		<Popover.Trigger
 			class={cn(
 				buttonVariants({ variant: 'outline' }),
