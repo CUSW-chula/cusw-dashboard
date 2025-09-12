@@ -1,23 +1,24 @@
 <script>
+	import { get } from 'svelte/store';
 	import { Gantt, Willow } from 'wx-svelte-gantt';
-
-	let { ganttchartMap } = $props();
-
-	const tasks = ganttchartMap.projects;
+	let { sortedGantt } = $props();
+	const tasks = get(sortedGantt).projects;
 
 	const columns = [
 		{ id: 'text', header: 'Title', flexgrow: 2 },
 		{
-			id: 'start',
+			id: 'display_start',
 			header: 'Start date',
 			flexgrow: 1,
-			align: 'center'
+			align: 'center',
+			sort: false
 		},
 		{
-			id: 'end',
+			id: 'display_end',
 			header: 'End date',
 			align: 'center',
-			flexgrow: 1
+			flexgrow: 1,
+			sort: false
 		},
 		{
 			id: 'progress_string',
@@ -66,6 +67,6 @@
 		{readonly}
 		scales={complexScales}
 		{lengthUnit}
-		start={ganttchartMap.first_display_date}
+		start={sortedGantt.first_display_date}
 	/>
 </Willow>

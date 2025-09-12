@@ -6,10 +6,9 @@
 	import { get } from 'svelte/store';
 	import DateFilter from '../../../components/filter/date-filter.svelte';
 	import TagFilter from '../../../components/filter/tag-filter.svelte';
-	import { filterDate } from '../../../lib/store.svelte.js';
-	import { filterGanttTag, tagsList } from '../../../lib/store.svelte.js';
+	import { filterDate, filterGanttTag, tagsList, sortedGantt } from '$lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
-	import { format } from 'date-fns';
+	import SortButton from '../../../components/sort-button.svelte';
 
 	let auth = '';
 	const cookieString = document.cookie;
@@ -26,6 +25,11 @@
 	let filteredGantt = $state([]);
 
 	function transformData(data) {
+		const formatter = new Intl.DateTimeFormat('en-GB', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric'
+		});
 		const isoFormatter = (date) => date.toISOString().split('T')[0];
 		let minStart = null;
 		let maxEnd = null;
@@ -38,16 +42,16 @@
 			if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) continue;
 
 			const adjustedEnd = new Date(end);
-			adjustedEnd.setHours(23, 59, 59, 999);
+			adjustedEnd.setDate(end.getDate() + 1);
 
 			if (!minStart || start < minStart) minStart = start;
 			if (!maxEnd || adjustedEnd > maxEnd) maxEnd = adjustedEnd;
 
 			projects.push({
 				...item,
-				display_start: start,
-				display_end: end,
-				end: adjustedEnd.toISOString(),
+				display_start: formatter.format(start),
+				display_end: formatter.format(end),
+				end: adjustedEnd,
 				parent: item.parentId,
 				progress_string: `${item.progress} %`,
 				progress: item.progress
@@ -135,13 +139,19 @@
 
 <div class="flex flex-col gap-4 px-20">
 	<h1 class="font-Anuphan text-5xl font-semibold">{project.title}</h1>
-	<section class="flex flex-wrap gap-2">
-		<DateFilter />
-		<TagFilter />
+	<section class="flex min-w-full flex-row">
+		<div class="flex justify-start gap-2">
+			<DateFilter />
+			<TagFilter />
+		</div>
+		<div class="flex w-full justify-end gap-2">
+			<SortButton {ganttchartMap} />
+		</div>
 	</section>
+
 	<section class="h-[650px] overflow-y-auto rounded-md border bg-white">
-		{#key filteredGantt}
-			<GanttChart {ganttchartMap} />
+		{#key $sortedGantt}
+			<GanttChart {sortedGantt} />
 		{/key}
 	</section>
 </div>

@@ -5,15 +5,12 @@
 	import BudgetAllocation from '../../components/chart/budget-allocation.svelte';
 	import ExpensesAllocation from '../../components/chart/expenses-allocation.svelte';
 	import RemainingAllocation from '../../components/chart/remaining-allocation.svelte';
-	import BudgetAllocation_byProject from '../../components/chart_byProject/budget-allocation.svelte';
-	import ExpensesAllocation_byProject from '../../components/chart_byProject/expenses-allocation.svelte';
-	import RemainingAllocation_byProject from '../../components/chart_byProject/remaining-allocation.svelte';
 	import DateFilter from '../../components/filter/date-filter.svelte';
 	import TagFilter from '../../components/filter/tag-filter.svelte';
 	import BackButton from '../../components/back-button.svelte';
-	import { filterDate, tagsList, filterGanttTag } from '../../lib/store.svelte.js';
+	import { filterDate, tagsList, filterGanttTag, sortedGantt } from '../../lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
-	import { format } from 'date-fns';
+	import SortButton from '../../components/sort-button.svelte';
 	let auth = '';
 	const cookieString = document.cookie;
 	const match = cookieString.match(/auth=([^;]+)/);
@@ -28,6 +25,11 @@
 	let filterTag = $state([]); // tags filtered
 
 	function transformData(data) {
+		const formatter = new Intl.DateTimeFormat('en-GB', {
+			day: '2-digit',
+			month: '2-digit',
+			year: 'numeric'
+		});
 		const isoFormatter = (date) => date.toISOString().split('T')[0];
 		let minStart = null;
 		let maxEnd = null;
@@ -40,16 +42,16 @@
 			if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) continue;
 
 			const adjustedEnd = new Date(end);
-			adjustedEnd.setHours(23, 59, 59, 999);
+			adjustedEnd.setDate(end.getDate() + 1);
 
 			if (!minStart || start < minStart) minStart = start;
 			if (!maxEnd || adjustedEnd > maxEnd) maxEnd = adjustedEnd;
 
 			projects.push({
 				...item,
-				display_start: start,
-				display_end: end,
-				end: adjustedEnd.toISOString(),
+				display_start: formatter.format(start),
+				display_end: formatter.format(end),
+				end: adjustedEnd,
 				progress_string: `${item.progress} %`,
 				progress: item.progress
 			});
@@ -252,14 +254,15 @@
 			<DateFilter />
 			<TagFilter />
 		</div>
-		<div class="flex w-full justify-end">
+		<div class="flex w-full justify-end gap-2">
+			<SortButton {ganttchartMap} />
 			<BackButton />
 		</div>
 	</section>
 	<h2 class="font-Anuphan text-3xl font-semibold">Gantt Chart</h2>
 	<section class="h-[650px] overflow-y-auto rounded-md border bg-white">
-		{#key filteredGantt}
-			<GanttChart {ganttchartMap} />
+		{#key $sortedGantt}
+			<GanttChart {sortedGantt} />
 		{/key}
 	</section>
 	<h2 class="font-Anuphan text-3xl font-semibold">Money Allocation</h2>

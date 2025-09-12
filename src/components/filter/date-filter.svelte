@@ -50,7 +50,7 @@
 		refDate = { ...value };
 		isOpen = false; // Close popover after applying
 	}
-	function closePopover(isOpen: boolean) {		
+	function closePopover(isOpen: boolean) {
 		if (isOpen) return;
 		isOpen = false;
 		value = { ...refDate };
