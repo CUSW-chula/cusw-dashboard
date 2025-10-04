@@ -9,6 +9,7 @@
 	import { filterDate, filterGanttTag, tagsList, sortedGantt } from '$lib/store.svelte.js';
 	import { getLocalTimeZone } from '@internationalized/date';
 	import SortButton from '../../../components/sort-button.svelte';
+	import BackButton from '../../../components/back-button.svelte';
 
 	let auth = '';
 	const cookieString = document.cookie;
@@ -139,6 +140,7 @@
 
 <div class="flex flex-col gap-4 px-20">
 	<h1 class="font-Anuphan text-5xl font-semibold">{project.title}</h1>
+	<BackButton path={`/projects/detail/${projectId}`} />
 	<section class="flex min-w-full flex-row">
 		<div class="flex justify-start gap-2">
 			<DateFilter />
