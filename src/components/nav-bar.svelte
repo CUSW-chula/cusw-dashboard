@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { API_BASE_URL } from '../lib/shared.js';
+	import { API_BASE_URL, BASE_URL } from '../lib/shared.js';
 	import Profile from './Profile.svelte';
 	import { onMount } from 'svelte';
 	import { jwtDecode } from 'jwt-decode';
@@ -57,7 +57,7 @@
 	}
 
 	function goToTasks() {
-		window.location.href = 'https://cusw-workspace.sa.chula.ac.th/my-tasks';
+		window.location.href = `${BASE_URL}/my-tasks`;
 	}
 </script>
 

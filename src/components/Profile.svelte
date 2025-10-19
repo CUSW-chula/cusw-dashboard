@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { goto } from '$app/navigation';
+	import { BASE_URL } from '$lib/shared.js';
 
 	interface ProfileProp {
 		id: string;
@@ -27,7 +28,7 @@
 
 	const handleLogout = () => {
 		document.cookie = 'auth=; Max-Age=0; path=/;';
-		window.location.href = 'https://cusw-workspace.sa.chula.ac.th/';
+		window.location.href = BASE_URL;
 	};
 </script>
 

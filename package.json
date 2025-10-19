@@ -68,6 +68,7 @@
 		"svelte"
 	],
 	"dependencies": {
+		"@types/node": "^24.8.1",
 		"jwt-decode": "^4.0.0",
 		"lucide-svelte": "^0.522.0",
 		"wx-svelte-gantt": "^2.1.1"
